@@ -40,7 +40,6 @@ export const getNewsById = async (req, res) => {
 };
 export const getNewsByCategory = async (req, res) => {
   const category = req.params.category;
-  console.log(typeof category);
 
   try {
     const data = await sql`select
