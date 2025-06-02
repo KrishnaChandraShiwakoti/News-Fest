@@ -1,0 +1,20 @@
+.footer {
+  background-color: #212121;
+  color: #ffffff;
+  gap: 30px;
+  justify-content: space-evenly;
+}
+.about-us {
+  margin-left: 100px;
+}
+.about-us p {
+  max-width: 200px;
+}
+.categories li {
+  list-style: none;
+  margin-bottom: 10px;
+}
+.categories li a {
+  text-decoration: none;
+  color: #ffffff;
+}

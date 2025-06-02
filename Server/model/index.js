@@ -1,0 +1,23 @@
+import News from "./news.js";
+import Reporter from "./reporter.js";
+import Category from "./category.js";
+
+// Reporter - News
+Reporter.hasMany(News, {
+  foreignKey: "reporterId",
+  as: "news",
+});
+News.belongsTo(Reporter, {
+  foreignKey: "reporterId",
+  as: "reporter",
+});
+
+// Category - News
+Category.hasMany(News, {
+  foreignKey: "categoryId",
+  as: "news",
+});
+News.belongsTo(Category, {
+  foreignKey: "categoryId",
+  as: "category",
+});
