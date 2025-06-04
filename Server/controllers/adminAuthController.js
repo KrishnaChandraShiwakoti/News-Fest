@@ -1,7 +1,7 @@
 import reporters from "../model/reporter.js";
 
 export const login = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password } = req.body.form;
   const reporter = await reporters.findOne({ where: { email } });
   const { databasePassword } = reporter;
   if (!reporter)
@@ -13,5 +13,5 @@ export const login = async (req, res) => {
     return res.status(400).json({ message: "Incorrect password" });
   }
 
-  res.status(200).json({ message: "Login SuccessFull", data: reporter });
+  res.status(201).json({ message: "Login SuccessFull", data: reporter });
 };

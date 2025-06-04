@@ -81,11 +81,12 @@ body {
   display: flex;
   align-items: center;
   margin-bottom: 12px;
+  gap: 10px;
 }
 
 .user img {
-  width: 36px;
-  height: 36px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   margin-right: 10px;
 }
@@ -137,7 +138,7 @@ body {
   display: none;
   background-color: #ffffff;
   box-shadow: 2px 3px 10px 2px;
-  width: 99vw;
+  width: 100%;
   height: auto;
   padding: 10px;
 }

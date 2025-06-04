@@ -1,5 +1,5 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { Login, HomeLayout, Dashboard, News } from "./Pages";
+import { Login, HomeLayout, Dashboard, News, AddNews } from "./Pages";
 import "./Styles/App.css";
 
 function App() {
@@ -16,6 +16,10 @@ function App() {
         {
           path: "news",
           element: <News />,
+        },
+        {
+          path: "news/add",
+          element: <AddNews />,
         },
       ],
     },
