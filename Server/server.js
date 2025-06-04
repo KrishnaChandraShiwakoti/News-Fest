@@ -6,6 +6,7 @@ import newsRouter from "./routes/newsRoutes.js";
 import db from "./config/db.js";
 import "./model/index.js";
 import News from "./model/news.js";
+import adminAuthRouter from "./routes/adminAuthRoutes.js";
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.listen(3000, () => {
 });
 
 app.use("/api/news", newsRouter);
+app.use("/admin", adminAuthRouter);
 // Home route
 app.get("/", (req, res) => {
   res.send("Hello from server side");

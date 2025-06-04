@@ -13,6 +13,9 @@ body {
   justify-content: space-between;
   padding: 20px;
   position: fixed;
+  top: 0;
+  left: 0;
+  transition: transform 0.3s ease;
 }
 
 /* Logo */
@@ -68,13 +71,6 @@ body {
   color: #2563eb;
   font-weight: 600;
 }
-
-/* Icon */
-.nav a i {
-  margin-right: 12px;
-  font-size: 16px;
-}
-
 /* User Profile */
 .profile {
   padding-top: 20px;
@@ -123,4 +119,49 @@ body {
 .logout i {
   margin-right: 10px;
   font-size: 16px;
+}
+
+/* Mobile Hidden by Default */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    z-index: 1000;
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+}
+
+/* Toggle Button */
+.navbar {
+  display: none;
+  background-color: #ffffff;
+  box-shadow: 2px 3px 10px 2px;
+  width: 99vw;
+  height: auto;
+  padding: 10px;
+}
+.menu-toggle {
+  position: static;
+  top: 20px;
+  left: 20px;
+  z-index: 1100;
+  background-color: #2563eb;
+  color: #fff;
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 20px;
+}
+.menu-cancel {
+  margin-left: 20px;
+  border: none;
+  background-color: transparent;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    display: block;
+  }
 }
