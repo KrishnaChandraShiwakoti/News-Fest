@@ -2,6 +2,9 @@
   margin-left: 240px; /* same width as your sidebar */
   padding: 20px;
 }
+.flex {
+  display: flex;
+}
 
 /* On mobile, remove margin so content takes full width */
 @media (max-width: 768px) {
