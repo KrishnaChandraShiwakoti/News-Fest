@@ -1,8 +1,8 @@
 import React from "react";
 import { Form, Link } from "react-router-dom";
-import "../Styles/Login.css";
+import "../../Styles/Login.css";
 import { useState } from "react";
-import { auth } from "../Utils/axios.js";
+import { auth } from "../../Utils/axios.js";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
@@ -74,9 +74,9 @@ const Login = () => {
   };
   return (
     <div className="login-form">
-      <h1>News Fest</h1>
-      <h3 className="subtitle">Reporter Portal</h3>
       <div className="form-container">
+        <h1>News Fest</h1>
+        <h3 className="subtitle">Reporter Portal</h3>
         <p>Sign Into Your Account</p>
         <Form onSubmit={handleSubmit}>
           <label htmlFor="email">Email Address</label>

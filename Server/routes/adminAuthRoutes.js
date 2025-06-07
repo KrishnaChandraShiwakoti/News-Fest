@@ -1,5 +1,10 @@
 import express from "express";
-import { login } from "../controllers/adminAuthController.js";
+import {
+  getAllNewsByReporter,
+  login,
+} from "../controllers/adminAuthController.js";
+import { verifyToken } from "../middleware/verifyToken.js";
 const router = express.Router();
 router.post("/login", login);
+router.get("/api/news", verifyToken, getAllNewsByReporter);
 export default router;

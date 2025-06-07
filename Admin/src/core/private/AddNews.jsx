@@ -1,14 +1,40 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import "../Styles/AddNews.css";
+import "../../Styles/AddNews.css";
 const AddNews = () => {
   const [image, setImage] = useState(null);
+  const [title, setTitle] = useState(null);
+  const [content, setContent] = useState(null);
+  const [status, setStatus] = useState(null);
+  const [category, setCategory] = useState(null);
 
+  const handleTitleChange = (e) => {
+    setTitle(e.target.value);
+  };
+  const handleContentChange = (e) => {
+    setContent(e.target.value);
+  };
+  const handleStatusChange = (e) => {
+    setStatus(e.target.value);
+  };
+  const handleCategoryChange = (e) => {
+    setCategory(e.target.value);
+  };
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setImage(URL.createObjectURL(file));
     }
+  };
+
+  const handleSubmit = () => {
+    const data = {
+      title,
+      content,
+      status,
+      category,
+      image,
+    };
   };
   return (
     <form>
@@ -18,20 +44,31 @@ const AddNews = () => {
           <Link to={"/news"} className="cancel">
             Cancel
           </Link>
-          <Link to={"/news/add"} type="submit" className="publish">
+          <Link
+            to={"/news/add"}
+            type="submit"
+            onClick={handleSubmit}
+            className="publish">
             Publish
           </Link>
         </div>
       </div>
       <div className="section-container">
         <div className="input-section">
-          <input type="text" placeholder="News Title" name="title" required />
+          <input
+            type="text"
+            placeholder="News Title"
+            onChange={handleTitleChange}
+            name="title"
+            required
+          />
           <textarea
             name="content"
             id=""
             placeholder="Write your news content here"
             rows="10"
             cols="10"
+            onChange={handleContentChange}
             required></textarea>
         </div>
         <div className="details-section">
@@ -40,12 +77,12 @@ const AddNews = () => {
           <label htmlFor="status" status>
             Status
           </label>
-          <select name="status" id="">
+          <select name="status" id="" onChange={handleStatusChange}>
             <option value="draft">Draft</option>
             <option value="published">published</option>
           </select>
           <label htmlFor="category">Category</label>
-          <select name="category" id="">
+          <select name="category" id="" onChange={handleCategoryChange}>
             <option value="world">World</option>
             <option value="news">News</option>
           </select>

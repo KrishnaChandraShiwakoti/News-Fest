@@ -1,5 +1,5 @@
 import React from "react";
-import Menus from "../Components/Menus";
+import Menus from "../../Components/Menus";
 import { Outlet } from "react-router-dom";
 
 const HomeLayout = () => {

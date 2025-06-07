@@ -1,8 +1,16 @@
 import React from "react";
-import "../Styles/News.css";
-import { Link } from "react-router-dom";
+import "../../Styles/News.css";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const News = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (!user) {
+      navigate("/login");
+    }
+  }, []);
   const articles = [
     {
       title: "Financial Markets Respond to Central Bank Announcement",

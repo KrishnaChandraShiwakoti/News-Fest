@@ -1,5 +1,5 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { Login, HomeLayout, Dashboard, News, AddNews } from "./Pages";
+import { Login, HomeLayout, Dashboard, News, AddNews } from "./core";
 import "./Styles/App.css";
 
 function App() {
@@ -26,6 +26,11 @@ function App() {
     {
       path: "/login",
       element: <Login />,
+      // children: [
+      //   {
+      //     path: "/forget",
+      //   },
+      // ],
     },
   ]);
   return (
