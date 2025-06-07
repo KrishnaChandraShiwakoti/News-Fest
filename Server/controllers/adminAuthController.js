@@ -22,4 +22,6 @@ export const login = async (req, res) => {
     .status(201)
     .json({ message: "Login SuccessFull", data: { reporter, token } });
 };
-export const getAllNewsByReporter = async (req, res) => {};
+export const getAllNewsByReporter = async (req, res) => {
+  const id = req.body.id;
+};
