@@ -57,11 +57,13 @@ const Login = () => {
         localStorage.setItem(
           "user",
           JSON.stringify({
-            name: res.data.data.reporter_fullname,
-            profilePicture: res.data.data.profile_picture,
-            id: res.data.data.reporterId,
+            name: res.data.data.reporter.reporter_fullname,
+            profilePicture: res.data.data.reporter.profile_picture,
+            id: res.data.data.reporter.reporterId,
           })
+
         );
+        localStorage.setItem("token",res.data.data.token)
         navigate("/");
       } else {
         toast.error(res.data.message);

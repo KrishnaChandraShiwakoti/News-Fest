@@ -1,45 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../Styles/News.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { auth } from "../../Utils/axios";
 
 const News = () => {
   const navigate = useNavigate();
+  const [articles, setArticles] = useState([]);
   useEffect(() => {
-    const user = localStorage.getItem("user");
+    const user = JSON.parse(localStorage.getItem("user"));
     if (!user) {
       navigate("/login");
     }
+    const BEARER_TOKEN = localStorage.getItem("token");
+
+    const fetchArticles = async () => {
+      try {
+        const response = await auth.get(`/api/news/${user.id}`, {
+          headers: {
+            Authorization: `Bearer ${BEARER_TOKEN}`,
+          },
+        });
+        console.log(response);
+
+        setArticles(response.data.data);
+      } catch (error) {
+        console.error("Error fetching articles:", error);
+      }
+    };
+    fetchArticles();
   }, []);
-  const articles = [
-    {
-      title: "Financial Markets Respond to Central Bank Announcement",
-      category: "Finance",
-      author: "Jennifer Wu",
-      date: "6/3/2025",
-      views: 764,
-      status: "Regular",
-      image: "https://source.unsplash.com/random/50x50?finance",
-    },
-    {
-      title: "Global Health Organization Declares End to Viral Outbreak",
-      category: "Health",
-      author: "Robert Chen",
-      date: "6/2/2025",
-      views: 723,
-      status: "Regular",
-      image: "https://source.unsplash.com/random/50x50?health",
-    },
-    {
-      title: "Global Tech Summit Announces Revolutionary AI Platform",
-      category: "Technology",
-      author: "Sarah Johnson",
-      date: "6/2/2025",
-      views: 1245,
-      status: "Featured",
-      image: "https://source.unsplash.com/random/50x50?technology",
-    },
-  ];
+
+  useEffect(() => {
+    console.log(articles);
+  }, [articles]);
+
   return (
     <div>
       <div className="title-container">
@@ -67,19 +62,22 @@ const News = () => {
             {articles.map((article, index) => (
               <tr key={index}>
                 <td data-label="Title">
-                  <img src={article.image} alt="Article" /> {article.title}
+                  <img src={article.image_url} alt="News" /> {article.title}
                 </td>
-                <td data-label="Category">{article.category}</td>
-                <td data-label="Author">{article.author}</td>
-                <td data-label="Date">{article.date}</td>
+                <td data-label="Category">{article.category.category_name}</td>
+                <td data-label="Author">
+                  {article.reporter.reporter_fullname}
+                </td>
+                <td data-label="Date">{article.updatedAt}</td>
                 <td data-label="Views">{article.views}</td>
                 <td data-label="Status">
                   <span
                     className={`status ${
-                      article.status === "Featured"
+                      article.status === "published"
                         ? "status-featured"
                         : "status-regular"
-                    }`}>
+                    }`}
+                  >
                     {article.status}
                   </span>
                 </td>

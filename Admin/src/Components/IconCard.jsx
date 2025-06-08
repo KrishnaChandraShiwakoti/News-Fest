@@ -2,13 +2,13 @@ import React from "react";
 
 const IconCard = ({ icon, growth, title, detail }) => {
   return (
-    <div>
-      <div>
-        {icon}
+    <div className="icon-container">
+      <div className="flex">
+        <div className="icon">{icon}</div>
         {growth}
       </div>
-      <p>{detail}</p>
-      <h4>{title}</h4>
+      <p className="details">{detail}</p>
+      <p className="title">{title}</p>
     </div>
   );
 };

@@ -1,6 +1,7 @@
 .title-container {
   display: flex;
   justify-content: space-between;
+  padding: 10px;
 }
 .title-container a {
   font-size: 15px;

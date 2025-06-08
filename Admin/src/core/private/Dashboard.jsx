@@ -1,33 +1,29 @@
-import React from "react";
 import "../../Styles/Dashboard.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FiRefreshCcw } from "react-icons/fi";
 import { FaEye } from "react-icons/fa";
 import { MdOutlineShowChart, MdShowChart } from "react-icons/md";
 import { LuNewspaper } from "react-icons/lu";
 import IconCard from "../../Components/IconCard";
 import { TbBrandGoogleAnalytics } from "react-icons/tb";
-
 import { NavLink, useNavigate } from "react-router-dom";
+import "../../Styles/Dashboard.css";
+import { auth } from "../../Utils/axios";
 
 const Dashboard = () => {
+  const [articles, setArticles] = useState([]);
   const navigate = useNavigate();
-  useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (!user) {
-      navigate("/login");
-    }
-  }, []);
+
   const categories = [
     {
       id: 1,
-      title: "News",
+      title: "Total News",
       icon: <LuNewspaper />,
       detail: 5,
     },
     {
       id: 2,
-      title: "Views",
+      title: "Total Views",
       icon: <FaEye />,
       detail: 5100,
     },
@@ -39,9 +35,31 @@ const Dashboard = () => {
       detail: 1,
     },
   ];
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+      navigate("/login");
+    }
+    const BEARER_TOKEN = localStorage.getItem("token");
+    const fetchArticles = async () => {
+      try {
+        const response = await auth.get(`/api/news/${user.id}`, {
+          headers: {
+            Authorization: `Bearer ${BEARER_TOKEN}`,
+          },
+        });
+        console.log(response);
+
+        setArticles(response.data.data);
+      } catch (error) {
+        console.error("Error fetching articles:", error);
+      }
+    };
+    fetchArticles();
+  }, []);
   return (
     <div>
-      <div>
+      <div className="title-container">
         <h1>DashBoard</h1>
         <p>
           <span>
@@ -50,13 +68,51 @@ const Dashboard = () => {
           Refresh
         </p>
       </div>
-      <div>
+      <div className="categories-container">
         {categories.map(({ id, title, icon, detail }) => {
           return (
             <IconCard key={id} title={title} icon={icon} detail={detail} />
           );
         })}
-        <IconCard />
+      </div>
+
+      <div className="dashboard-feature-container">
+        <div className="new-container">
+          <div className="title-container">
+            <h1>Popular News</h1>
+            <button
+              onClick={() => {
+                navigate("/news");
+              }}
+            >
+              View All
+            </button>
+          </div>
+          <div className="categories-container">
+            {articles?.map((news) => {
+              return (
+                <div key={news.id} className="news-container">
+                  <img src={news.image_url} alt="News" className="news-img" />
+                  <div className="news-header">
+                    <h1>{news.title}</h1>
+                    <p>{news.content}</p>
+                  </div>
+                  <div className="news-footer">
+                    <p>{news.category.category_name}</p>
+                    <button>edit</button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="quick-actions-container">
+          <h1>Quick Actions</h1>
+          <button>Create New News</button>
+          <button>Manage News </button>
+          <button>View Analytics</button>
+        </div>
       </div>
     </div>
   );

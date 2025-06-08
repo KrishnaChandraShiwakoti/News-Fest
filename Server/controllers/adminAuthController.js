@@ -2,6 +2,7 @@ import reporters from "../model/reporter.js";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import News from "../model/news.js";
+import categories from "../model/category.js";
 
 dotenv.config();
 
@@ -23,15 +24,25 @@ export const login = async (req, res) => {
     .status(201)
     .json({ message: "Login SuccessFull", data: { reporter, token } });
 };
+
+
+
 export const getAllNewsByReporter = async (req, res) => {
-  const id = req.body.id;
+const id = req.params.id;
+console.log(id);
+
 
 if (!id) {
   return res.status(400).json({ message: "ID is required" }); // Handle missing ID case
 }
 
 try {
-  const data = await News.findAll({ where: { reporterId: id } });
+  const data = await News.findAll({ where: { reporterId: id } ,
+      include: [
+        { model: categories, as: "category" },
+        { model: reporters, as: "reporter" },
+      ],
+    });
 
   // Check if data exists
   if (data.length === 0) {
