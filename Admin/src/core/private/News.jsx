@@ -31,10 +31,6 @@ const News = () => {
     fetchArticles();
   }, []);
 
-  useEffect(() => {
-    console.log(articles);
-  }, [articles]);
-
   return (
     <div>
       <div className="title-container">

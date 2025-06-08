@@ -1,12 +1,18 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../../Styles/AddNews.css";
+import axios from "axios";
+import { toast } from "react-toastify";
 const AddNews = () => {
   const [image, setImage] = useState(null);
   const [title, setTitle] = useState(null);
   const [content, setContent] = useState(null);
   const [status, setStatus] = useState(null);
   const [category, setCategory] = useState(null);
+  const navigate = useNavigate();
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  const BEARER_TOKEN = localStorage.getItem("token");
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -19,6 +25,7 @@ const AddNews = () => {
   };
   const handleCategoryChange = (e) => {
     setCategory(e.target.value);
+    console.log(category);
   };
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -27,14 +34,29 @@ const AddNews = () => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const data = {
       title,
       content,
       status,
       category,
       image,
+      id: user.id,
     };
+    console.log(data);
+
+    try {
+      const res = await axios.post("http://localhost:3000/api/news", data, {
+        headers: { Authorization: `Bearer ${BEARER_TOKEN}` },
+      });
+      if (res.status == 201) {
+        toast.success(res.data.message);
+        navigate("/");
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error(err.response.data.message);
+    }
   };
   return (
     <form>
@@ -48,7 +70,8 @@ const AddNews = () => {
             to={"/news/add"}
             type="submit"
             onClick={handleSubmit}
-            className="publish">
+            className="publish"
+          >
             Publish
           </Link>
         </div>
@@ -69,7 +92,8 @@ const AddNews = () => {
             rows="10"
             cols="10"
             onChange={handleContentChange}
-            required></textarea>
+            required
+          ></textarea>
         </div>
         <div className="details-section">
           <h3>News Details</h3>
@@ -78,13 +102,13 @@ const AddNews = () => {
             Status
           </label>
           <select name="status" id="" onChange={handleStatusChange}>
-            <option value="draft">Draft</option>
+            <option value="draft">draft</option>
             <option value="published">published</option>
           </select>
           <label htmlFor="category">Category</label>
           <select name="category" id="" onChange={handleCategoryChange}>
-            <option value="world">World</option>
-            <option value="news">News</option>
+            <option value="world">world</option>
+            <option value="news">news</option>
           </select>
         </div>
       </div>

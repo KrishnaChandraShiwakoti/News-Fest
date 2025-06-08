@@ -69,3 +69,25 @@ export const getNewsByCategory = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
+export const postNews = async (req, res) => {
+  console.log(req);
+
+  const { id, title, content, status, category, image } = req.body;
+  const { categoryId } = await categories.findOne({
+    where: { category_name: category },
+  });
+  try {
+    const news = await News.create({
+      title,
+      content,
+      status,
+      image_url: image,
+      reporterId: id,
+      categoryId,
+    });
+    res.status(201).json({ message: "Added successfully", categoryId });
+  } catch (error) {
+    console.log("Error in getProduct function", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
