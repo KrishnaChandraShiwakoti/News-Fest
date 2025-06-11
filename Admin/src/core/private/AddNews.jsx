@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../../Styles/AddNews.css";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
+import { news } from "../../Utils/axios";
 const AddNews = () => {
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -13,7 +13,6 @@ const AddNews = () => {
     register,
     handleSubmit,
     formState: { errors },
-    setError,
   } = useForm();
 
   const user = JSON.parse(localStorage.getItem("user"));
@@ -42,7 +41,7 @@ const AddNews = () => {
     }
 
     try {
-      const res = await axios.post("http://localhost:3000/api/news", formData, {
+      const res = await news.post("", formData, {
         headers: { Authorization: `Bearer ${BEARER_TOKEN}` },
         // "Content-Type": "multipart/form-data",
       });
@@ -80,8 +79,7 @@ const AddNews = () => {
             {...register("content", { required: "content is required" })}
             placeholder="Write your news content here"
             rows="10"
-            cols="10"
-          ></textarea>
+            cols="10"></textarea>
         </div>
         <div className="details-section">
           <h3>News Details</h3>
@@ -91,16 +89,14 @@ const AddNews = () => {
           </label>
           <select
             defaultValue={"draft"}
-            {...register("status", { required: "Status is required" })}
-          >
+            {...register("status", { required: "Status is required" })}>
             <option value="draft">draft</option>
             <option value="published">published</option>
           </select>
           <label htmlFor="category">Category</label>
           <select
             defaultValue={"world"}
-            {...register("category", { required: "category is required" })}
-          >
+            {...register("category", { required: "category is required" })}>
             <option value="world">world</option>
             <option value="news">news</option>
           </select>

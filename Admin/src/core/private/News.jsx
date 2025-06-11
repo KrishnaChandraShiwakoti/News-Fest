@@ -65,7 +65,7 @@ const News = () => {
                       src={`http://localhost:3000${article.imageUrl}`}
                       alt="News"
                     />{" "}
-                    {article.title}
+                    {`${article.title.substring(0, 80)}...`}
                   </td>
                   <td data-label="Category">
                     {article.category.category_name}

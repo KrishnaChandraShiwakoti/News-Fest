@@ -48,8 +48,6 @@ const Dashboard = () => {
             Authorization: `Bearer ${BEARER_TOKEN}`,
           },
         });
-        console.log(response);
-
         setArticles(response.data.data);
       } catch (error) {
         console.error("Error fetching articles:", error);
@@ -88,17 +86,17 @@ const Dashboard = () => {
             </button>
           </div>
           <div className="categories-container">
-            {articles?.map((news) => {
+            {articles?.slice(0, 4).map((news) => {
               return (
-                <div key={news.id} className="news-container">
+                <div key={news.newsId} className="news-container">
                   <img
                     src={`http://localhost:3000${news.imageUrl}`}
                     alt="News"
                     className="news-img"
                   />
                   <div className="news-header">
-                    <h1>{news.title}</h1>
-                    <p>{news.content}</p>
+                    <h1>{`${news.title.substring(0, 50)}...`}</h1>
+                    <p>{`${news.content.substring(0, 150)}...`}</p>
                   </div>
                   <div className="news-footer">
                     <p>{news.category.category_name}</p>
@@ -112,7 +110,7 @@ const Dashboard = () => {
 
         <div className="quick-actions-container">
           <h1>Quick Actions</h1>
-          <button>Create New News</button>
+          <button onClick={() => navigate("/news/add")}>Create New News</button>
           <button>Manage News </button>
           <button>View Analytics</button>
         </div>
