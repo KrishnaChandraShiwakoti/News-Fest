@@ -1,23 +1,15 @@
-import React from "react";
-import { Form, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "../../Styles/Login.css";
 import { useState } from "react";
 import { auth } from "../../Utils/axios.js";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 
 const Login = () => {
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-  });
   const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
-  const handleChange = async (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
 
   useEffect(() => {
     const user = localStorage.getItem("user");
@@ -26,29 +18,21 @@ const Login = () => {
     }
   }, []);
 
-  const validateForm = () => {
-    const newErrors = {};
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    setError,
+  } = useForm();
 
-    if (!form.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(form.email)) {
-      newErrors.email = "Email is invalid";
-    }
+  const password = watch("password");
 
-    if (!form.password) {
-      newErrors.password = "Password is required";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-  const handleSubmit = async () => {
-    if (!validateForm()) {
-      return;
-    }
+  const onSubmit = async (data) => {
+    console.log(data);
     setIsLoading(true);
     try {
-      const res = await auth.post("/login", { form });
+      const res = await auth.post("/login", { form: data });
       console.log(res);
 
       if (res.status == 201) {
@@ -61,9 +45,8 @@ const Login = () => {
             profilePicture: res.data.data.reporter.profile_picture,
             id: res.data.data.reporter.reporterId,
           })
-
         );
-        localStorage.setItem("token",res.data.data.token)
+        localStorage.setItem("token", res.data.data.token);
         navigate("/");
       } else {
         toast.error(res.data.message);
@@ -80,16 +63,29 @@ const Login = () => {
         <h1>News Fest</h1>
         <h3 className="subtitle">Reporter Portal</h3>
         <p>Sign Into Your Account</p>
-        <Form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <label htmlFor="email">Email Address</label>
-          <input type="email" name="email" onChange={handleChange} required />
+          <input
+            type="email"
+            {...register("email", { required: "Email is required" })}
+          />
+          {errors.email && <p>{errors.email.message}</p>}
           <label htmlFor="password">Password</label>
           <input
             type="password"
-            name="password"
-            onChange={handleChange}
-            required
+            {...register("password", {
+              required: "Password is required",
+              // validate: {
+              //   hasUpper: (val) =>
+              //     /[A-Z]/.test(val) || "Must include an uppercase letter",
+              //   hasLower: (val) =>
+              //     /[a-z]/.test(val) || "Must include a lowercase letter",
+              //   hasNumber: (val) =>
+              //     /[0-9]/.test(val) || "Must include a number",
+              // },
+            })}
           />
+          {errors.password && <p>{errors.password.message}</p>}
           <div className="options">
             <label>
               <input type="checkbox" /> Remember me
@@ -99,7 +95,7 @@ const Login = () => {
           <button type="submit" disabled={isLoading}>
             {isLoading ? "Signing in" : "SignIn"}
           </button>
-        </Form>
+        </form>
       </div>
     </div>
   );

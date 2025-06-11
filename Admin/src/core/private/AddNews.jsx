@@ -3,51 +3,48 @@ import { Link, useNavigate } from "react-router-dom";
 import "../../Styles/AddNews.css";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useForm } from "react-hook-form";
 const AddNews = () => {
   const [image, setImage] = useState(null);
-  const [title, setTitle] = useState(null);
-  const [content, setContent] = useState(null);
-  const [status, setStatus] = useState(null);
-  const [category, setCategory] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = useForm();
 
   const user = JSON.parse(localStorage.getItem("user"));
   const BEARER_TOKEN = localStorage.getItem("token");
 
-  const handleTitleChange = (e) => {
-    setTitle(e.target.value);
-  };
-  const handleContentChange = (e) => {
-    setContent(e.target.value);
-  };
-  const handleStatusChange = (e) => {
-    setStatus(e.target.value);
-  };
-  const handleCategoryChange = (e) => {
-    setCategory(e.target.value);
-    console.log(category);
-  };
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImage(URL.createObjectURL(file));
+      setImagePreview(URL.createObjectURL(file));
+      setImage(file);
     }
   };
 
-  const handleSubmit = async () => {
-    const data = {
-      title,
-      content,
-      status,
-      category,
-      image,
-      id: user.id,
-    };
-    console.log(data);
+  const onSubmit = async (data) => {
+    const formData = new FormData();
+
+    formData.append("title", data.title);
+    formData.append("content", data.content);
+    formData.append("status", data.status);
+    formData.append("category", data.category); // assuming it's the ID
+    formData.append("reporterId", user.id); // use whatever ID field matches
+    formData.append("image", image);
+
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ": " + pair[1]);
+    }
 
     try {
-      const res = await axios.post("http://localhost:3000/api/news", data, {
+      const res = await axios.post("http://localhost:3000/api/news", formData, {
         headers: { Authorization: `Bearer ${BEARER_TOKEN}` },
+        // "Content-Type": "multipart/form-data",
       });
       if (res.status == 201) {
         toast.success(res.data.message);
@@ -59,40 +56,31 @@ const AddNews = () => {
     }
   };
   return (
-    <form>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="title">
         <h1>Add new News</h1>
         <div className="flex">
           <Link to={"/news"} className="cancel">
             Cancel
           </Link>
-          <Link
-            to={"/news/add"}
-            type="submit"
-            onClick={handleSubmit}
-            className="publish"
-          >
+          <button type="submit" className="publish">
             Publish
-          </Link>
+          </button>
         </div>
       </div>
       <div className="section-container">
         <div className="input-section">
           <input
             type="text"
+            {...register("title", { required: "Email is required" })}
             placeholder="News Title"
-            onChange={handleTitleChange}
-            name="title"
-            required
           />
+          {errors.email && <p>{errors.email.message}</p>}
           <textarea
-            name="content"
-            id=""
+            {...register("content", { required: "content is required" })}
             placeholder="Write your news content here"
             rows="10"
             cols="10"
-            onChange={handleContentChange}
-            required
           ></textarea>
         </div>
         <div className="details-section">
@@ -101,12 +89,18 @@ const AddNews = () => {
           <label htmlFor="status" status>
             Status
           </label>
-          <select name="status" id="" onChange={handleStatusChange}>
+          <select
+            defaultValue={"draft"}
+            {...register("status", { required: "Status is required" })}
+          >
             <option value="draft">draft</option>
             <option value="published">published</option>
           </select>
           <label htmlFor="category">Category</label>
-          <select name="category" id="" onChange={handleCategoryChange}>
+          <select
+            defaultValue={"world"}
+            {...register("category", { required: "category is required" })}
+          >
             <option value="world">world</option>
             <option value="news">news</option>
           </select>
@@ -115,8 +109,8 @@ const AddNews = () => {
       <div className="featured-image-container">
         <h3>Featured Image</h3>
         <div className="image-preview">
-          {image ? (
-            <img src={image} alt="Selected" />
+          {imagePreview ? (
+            <img src={imagePreview} alt="Selected" />
           ) : (
             <div className="placeholder">
               <span role="img" aria-label="image icon">

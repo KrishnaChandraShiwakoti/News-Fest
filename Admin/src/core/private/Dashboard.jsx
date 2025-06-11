@@ -83,8 +83,7 @@ const Dashboard = () => {
             <button
               onClick={() => {
                 navigate("/news");
-              }}
-            >
+              }}>
               View All
             </button>
           </div>
@@ -92,7 +91,11 @@ const Dashboard = () => {
             {articles?.map((news) => {
               return (
                 <div key={news.id} className="news-container">
-                  <img src={news.image_url} alt="News" className="news-img" />
+                  <img
+                    src={`http://localhost:3000${news.imageUrl}`}
+                    alt="News"
+                    className="news-img"
+                  />
                   <div className="news-header">
                     <h1>{news.title}</h1>
                     <p>{news.content}</p>

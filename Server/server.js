@@ -7,8 +7,14 @@ import db from "./config/db.js";
 import "./model/index.js";
 import News from "./model/news.js";
 import adminAuthRouter from "./routes/adminAuthRoutes.js";
+import path from "path";
+import { fileURLToPath } from "url";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const app = express();
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // if ((process.env.NODE_ENV = "development")) {
 //   db.sync({ alter: true }).then(async () => {
@@ -34,6 +40,7 @@ app.listen(3000, () => {
 
 app.use("/api/news", newsRouter);
 app.use("/admin", adminAuthRouter);
+app.get("/image/:id", (req, res) => {});
 // Home route
 app.get("/", (req, res) => {
   res.send("Hello from server side");

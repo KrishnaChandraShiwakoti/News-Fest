@@ -2,7 +2,7 @@ import db from "../config/db.js";
 import { DataTypes } from "sequelize";
 
 const News = db.define("news", {
-  id: {
+  newsId: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
@@ -14,9 +14,6 @@ const News = db.define("news", {
   content: {
     type: DataTypes.TEXT,
     allowNull: false,
-  },
-  image_url: {
-    type: DataTypes.STRING,
   },
   views: {
     type: DataTypes.INTEGER,
@@ -42,6 +39,13 @@ const News = db.define("news", {
     references: {
       model: "categories",
       key: "categoryId",
+    },
+    imageId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "images",
+        key: "id",
+      },
     },
   },
 });
