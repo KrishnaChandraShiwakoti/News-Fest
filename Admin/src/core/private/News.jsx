@@ -30,7 +30,9 @@ const News = () => {
     };
     fetchArticles();
   }, []);
-
+  const handleDelete = async (id) => {
+    console.log(id);
+  };
   return (
     <div>
       <div className="title-container">
@@ -47,7 +49,6 @@ const News = () => {
             <tr>
               <th>Title</th>
               <th>Category</th>
-              <th>Author</th>
               <th>Date</th>
               <th>Views</th>
               <th>Status</th>
@@ -55,34 +56,44 @@ const News = () => {
             </tr>
           </thead>
           <tbody>
-            {articles.map((article, index) => (
-              <tr key={index}>
-                <td data-label="Title">
-                  <img src={article.image_url} alt="News" /> {article.title}
-                </td>
-                <td data-label="Category">{article.category.category_name}</td>
-                <td data-label="Author">
-                  {article.reporter.reporter_fullname}
-                </td>
-                <td data-label="Date">{article.updatedAt}</td>
-                <td data-label="Views">{article.views}</td>
-                <td data-label="Status">
-                  <span
-                    className={`status ${
-                      article.status === "published"
-                        ? "status-featured"
-                        : "status-regular"
-                    }`}
-                  >
-                    {article.status}
-                  </span>
-                </td>
-                <td data-label="Actions" className="actions">
-                  <button className="edit">Edit</button>
-                  <button className="delete">Delete</button>
-                </td>
-              </tr>
-            ))}
+            {articles.map((article) => {
+              console.log(article);
+              return (
+                <tr key={article.newsId}>
+                  <td data-label="Title">
+                    <img
+                      src={`http://localhost:3000${article.imageUrl}`}
+                      alt="News"
+                    />{" "}
+                    {article.title}
+                  </td>
+                  <td data-label="Category">
+                    {article.category.category_name}
+                  </td>
+
+                  <td data-label="Date">{article.updatedAt}</td>
+                  <td data-label="Views">{article.views}</td>
+                  <td data-label="Status">
+                    <span
+                      className={`status ${
+                        article.status === "published"
+                          ? "status-featured"
+                          : "status-regular"
+                      }`}>
+                      {article.status}
+                    </span>
+                  </td>
+                  <td data-label="Actions" className="actions">
+                    <button className="edit">Edit</button>
+                    <button
+                      className="delete"
+                      onClick={() => handleDelete(article.newsId)}>
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

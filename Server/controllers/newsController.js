@@ -116,3 +116,10 @@ export const postNews = async (req, res) => {
       .json({ success: false, message: "Internal Server Error" });
   }
 };
+export const deletePost = async (req, res) => {
+  const { newsId } = req.body;
+  await News.destroy({
+    where: { newsId },
+  });
+  res.send(200).json({ message: "News deleted successfully" });
+};

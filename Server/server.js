@@ -40,7 +40,6 @@ app.listen(3000, () => {
 
 app.use("/api/news", newsRouter);
 app.use("/admin", adminAuthRouter);
-app.get("/image/:id", (req, res) => {});
 // Home route
 app.get("/", (req, res) => {
   res.send("Hello from server side");
