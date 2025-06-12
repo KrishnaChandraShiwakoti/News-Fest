@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import "../../Styles/News.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { auth } from "../../Utils/axios";
-
+import {
+  useReactTable,
+  getCoreRowModel,
+  flexRender,
+} from "@tanstack/react-table";
 const News = () => {
   const navigate = useNavigate();
   const [articles, setArticles] = useState([]);
@@ -30,9 +34,74 @@ const News = () => {
     };
     fetchArticles();
   }, []);
-  const handleDelete = async (id) => {
-    console.log(id);
-  };
+  const data = useMemo(() => articles, [articles]);
+  const columns = React.useMemo(
+    () => [
+      {
+        header: "Title",
+        accessorKey: "title",
+        cell: ({ row }) => (
+          <div data-label="Title">
+            <img
+              src={`http://localhost:3000${row.original.imageUrl}`}
+              alt="News"
+              style={{ width: "50px", height: "auto", marginRight: "10px" }}
+            />
+            {`${row.original.title.substring(0, 80)}...`}
+          </div>
+        ),
+      },
+      {
+        header: "Category",
+        accessorKey: "category.category_name",
+        cell: ({ row }) => <span>{row.original.category.category_name}</span>,
+      },
+      {
+        header: "Date",
+        accessorKey: "updatedAt",
+      },
+      {
+        header: "Views",
+        accessorKey: "views",
+      },
+      {
+        header: "Status",
+        accessorKey: "status",
+        cell: ({ row }) => (
+          <span
+            className={`status ${
+              row.original.status === "published"
+                ? "status-featured"
+                : "status-regular"
+            }`}>
+            {row.original.status}
+          </span>
+        ),
+      },
+      {
+        header: "Actions",
+        cell: ({ row }) => (
+          <div className="actions" data-label="Actions">
+            <button className="edit">Edit</button>
+            <button
+              className="delete"
+              // onClick={() => handleDelete(row.original.newsId)}
+            >
+              Delete
+            </button>
+          </div>
+        ),
+      },
+    ]
+    // [handleDelete]
+  );
+
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
+
   return (
     <div>
       <div className="title-container">
@@ -40,60 +109,33 @@ const News = () => {
         <Link to={"/news/add"}>New Article</Link>
       </div>
 
-      {/* Search */}
-
-      {/* News */}
+      {/* Table */}
       <div>
         <table className="table">
           <thead>
-            <tr>
-              <th>Title</th>
-              <th>Category</th>
-              <th>Date</th>
-              <th>Views</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <th key={header.id}>
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                  </th>
+                ))}
+              </tr>
+            ))}
           </thead>
           <tbody>
-            {articles.map((article) => {
-              console.log(article);
-              return (
-                <tr key={article.newsId}>
-                  <td data-label="Title">
-                    <img
-                      src={`http://localhost:3000${article.imageUrl}`}
-                      alt="News"
-                    />{" "}
-                    {`${article.title.substring(0, 80)}...`}
+            {table.getRowModel().rows.map((row) => (
+              <tr key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <td key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
-                  <td data-label="Category">
-                    {article.category.category_name}
-                  </td>
-
-                  <td data-label="Date">{article.updatedAt}</td>
-                  <td data-label="Views">{article.views}</td>
-                  <td data-label="Status">
-                    <span
-                      className={`status ${
-                        article.status === "published"
-                          ? "status-featured"
-                          : "status-regular"
-                      }`}>
-                      {article.status}
-                    </span>
-                  </td>
-                  <td data-label="Actions" className="actions">
-                    <button className="edit">Edit</button>
-                    <button
-                      className="delete"
-                      onClick={() => handleDelete(article.newsId)}>
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
+                ))}
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

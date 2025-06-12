@@ -1,6 +1,9 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Login, HomeLayout, Dashboard, News, AddNews } from "./core";
 import "./Styles/App.css";
+import Settings from "./core/private/Settings";
+import ProfileForm from "./Components/Profile/ProfileForm";
+import AccountSettings from "./Components/Profile/AccountSettings";
 
 function App() {
   const router = createBrowserRouter([
@@ -20,6 +23,20 @@ function App() {
         {
           path: "news/add",
           element: <AddNews />,
+        },
+        {
+          path: "/settings",
+          element: <Settings />,
+          children: [
+            {
+              index: true,
+              element: <ProfileForm />,
+            },
+            {
+              path: "/settings/accountsetting",
+              element: <AccountSettings />,
+            },
+          ],
         },
       ],
     },
