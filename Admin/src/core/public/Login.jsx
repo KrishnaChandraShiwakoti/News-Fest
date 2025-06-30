@@ -32,7 +32,7 @@ const Login = () => {
     console.log(data);
     setIsLoading(true);
     try {
-      const res = await auth.post("/login", { form: data });
+      const res = await auth.post("/login", { data });
       console.log(res);
 
       if (res.status == 201) {

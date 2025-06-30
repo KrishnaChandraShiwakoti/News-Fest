@@ -4,11 +4,12 @@ import jwt from "jsonwebtoken";
 import News from "../model/news.js";
 import categories from "../model/category.js";
 import images from "../model/images.js";
+import { generateToken } from "../security/jwt-util.js";
 
 dotenv.config();
 
 export const login = async (req, res) => {
-  const { email, password } = req.body.form;
+  const { email, password } = req.body;
   const reporter = await reporters.findOne({ where: { email } });
   const { databasePassword } = reporter;
   if (!reporter)
@@ -19,8 +20,7 @@ export const login = async (req, res) => {
   if (password != reporter.password) {
     return res.status(400).json({ message: "Incorrect password" });
   }
-
-  const token = jwt.sign({ id: reporter.id }, process.env.ACCESS_TOKEN_SECRET);
+  const token = generateToken(reporter.id);
   res
     .status(201)
     .json({ message: "Login SuccessFull", data: { reporter, token } });

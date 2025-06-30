@@ -8,6 +8,7 @@ import "./model/index.js";
 import News from "./model/news.js";
 import adminAuthRouter from "./routes/adminAuthRoutes.js";
 import path from "path";
+import authRouter from "./routes/authRoutes.js";
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -40,6 +41,7 @@ app.listen(3000, () => {
 
 app.use("/api/news", newsRouter);
 app.use("/admin", adminAuthRouter);
+app.use("/auth", authRouter);
 // Home route
 app.get("/", (req, res) => {
   res.send("Hello from server side");
