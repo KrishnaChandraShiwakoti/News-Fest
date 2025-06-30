@@ -15,9 +15,9 @@ const Navbar = () => {
           <Navlinks />
         </div>
         <div className="auth flex">
-          <Link to="/auth">login</Link>
+          <Link to="/login">login</Link>
           <span>/</span>
-          <Link to="/auth/register">Register</Link>
+          <Link to="/register">Register</Link>
         </div>
       </div>
     </nav>

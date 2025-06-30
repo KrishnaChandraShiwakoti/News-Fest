@@ -1,13 +1,9 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import "../../Styles/News.css";
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 import { auth } from "../../Utils/axios";
-import {
-  useReactTable,
-  getCoreRowModel,
-  flexRender,
-} from "@tanstack/react-table";
+import DataTable from "react-data-table-component";
+
 const News = () => {
   const navigate = useNavigate();
   const [articles, setArticles] = useState([]);
@@ -34,113 +30,30 @@ const News = () => {
     };
     fetchArticles();
   }, []);
+  console.log(articles);
+
   const data = useMemo(() => articles, [articles]);
-  const columns = React.useMemo(
-    () => [
-      {
-        header: "Title",
-        accessorKey: "title",
-        cell: ({ row }) => (
-          <div data-label="Title">
-            <img
-              src={`http://localhost:3000${row.original.imageUrl}`}
-              alt="News"
-              style={{ width: "50px", height: "auto", marginRight: "10px" }}
-            />
-            {`${row.original.title.substring(0, 80)}...`}
-          </div>
-        ),
-      },
-      {
-        header: "Category",
-        accessorKey: "category.category_name",
-        cell: ({ row }) => <span>{row.original.category.category_name}</span>,
-      },
-      {
-        header: "Date",
-        accessorKey: "updatedAt",
-      },
-      {
-        header: "Views",
-        accessorKey: "views",
-      },
-      {
-        header: "Status",
-        accessorKey: "status",
-        cell: ({ row }) => (
-          <span
-            className={`status ${
-              row.original.status === "published"
-                ? "status-featured"
-                : "status-regular"
-            }`}>
-            {row.original.status}
-          </span>
-        ),
-      },
-      {
-        header: "Actions",
-        cell: ({ row }) => (
-          <div className="actions" data-label="Actions">
-            <button className="edit">Edit</button>
-            <button
-              className="delete"
-              // onClick={() => handleDelete(row.original.newsId)}
-            >
-              Delete
-            </button>
-          </div>
-        ),
-      },
-    ]
-    // [handleDelete]
-  );
+  console.log(data);
 
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
+  const columns = [
+    { name: "Title", selector: (row) => row.Title },
+    { name: "Category", selector: (row) => row.Category },
+    // { name: "Role", selector: (row) => row.role },
+    // { name: "Status", selector: (row) => row.status },
+    {
+      name: "Actions",
+      cell: (row) => (
+        <>
+          <Link to={`/users/${row.id}`}>View</Link>
+          <Link to={`/users/${row.id}/edit`}>Edit</Link>|{""}
+          <button onClick={() => onDelete(row.id)}>Delete</button>
+        </>
+      ),
+    },
+  ];
+  const onDelete = () => {};
 
-  return (
-    <div>
-      <div className="title-container">
-        <h1>News</h1>
-        <Link to={"/news/add"}>New Article</Link>
-      </div>
-
-      {/* Table */}
-      <div>
-        <table className="table">
-          <thead>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th key={header.id}>
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
+  return <DataTable columns={columns} data={data} pagination></DataTable>;
 };
 
 export default News;

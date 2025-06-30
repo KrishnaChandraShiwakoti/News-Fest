@@ -1,5 +1,5 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { Error, HomeLayout, Landing } from "./Pages";
+import { Error, HomeLayout, Landing, Login, Register } from "./core/public";
 
 function App() {
   const router = createBrowserRouter([
@@ -13,6 +13,14 @@ function App() {
           element: <Landing />,
         },
       ],
+    },
+    {
+      path: "/login",
+      element: <Login />,
+    },
+    {
+      path: "/register",
+      element: <Register />,
     },
   ]);
   return (
