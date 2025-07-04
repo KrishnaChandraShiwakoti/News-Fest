@@ -3,6 +3,8 @@ import "../../Styles/login.css";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import image from "../../assets/login.jpg";
+import { auth } from "../../Utils/axios";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -14,7 +16,34 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = () => {
+  const onSubmit = async (data) => {
+    setIsLoading(true);
+    try {
+      const res = await auth.post("/login", data);
+      console.log(res);
+
+      if (res.status == 200) {
+        toast.success("logged in successfully");
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            name: res.data.fullname,
+            email: res.data.email,
+            id: res.data.id,
+          })
+        );
+        localStorage.setItem("token", res.data.token);
+
+        navigate("/");
+      } else {
+        toast.error(res.data.message);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      toast.error(error.response.data.message);
+      setIsLoading(false);
+    }
+
     // Login logic will be handled here
   };
 

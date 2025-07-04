@@ -9,7 +9,9 @@ import { generateToken } from "../security/jwt-util.js";
 dotenv.config();
 
 export const login = async (req, res) => {
-  const { email, password } = req.body;
+  console.log(req.body);
+
+  const { email, password } = req.body.data;
   const reporter = await reporters.findOne({ where: { email } });
   const { databasePassword } = reporter;
   if (!reporter)
@@ -20,7 +22,7 @@ export const login = async (req, res) => {
   if (password != reporter.password) {
     return res.status(400).json({ message: "Incorrect password" });
   }
-  const token = generateToken(reporter.id);
+  const token = generateToken({ id: reporter.id });
   res
     .status(201)
     .json({ message: "Login SuccessFull", data: { reporter, token } });

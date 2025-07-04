@@ -21,12 +21,8 @@ const Login = () => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-    setError,
   } = useForm();
-
-  const password = watch("password");
 
   const onSubmit = async (data) => {
     console.log(data);

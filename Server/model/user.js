@@ -26,7 +26,7 @@ const User = db.define("User", {
     allowNull: false,
   },
   contact: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.BIGINT,
     allowNull: false,
   },
 });

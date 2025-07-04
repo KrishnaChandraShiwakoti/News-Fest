@@ -1,20 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../Styles/Register.css";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import image from "../../assets/login.jpg";
+import { auth } from "../../Utils/axios";
+import { toast } from "react-toastify";
 
 const Register = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
-    setError,
   } = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    console.log(data);
+
+    setIsLoading(true);
+    try {
+      const res = await auth.post("/register", data);
+      if (res.status == 201) {
+        toast.success("User Registered in successfully");
+        navigate("/");
+      } else {
+        toast.error(res.data.message);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
+
     // handle registration logic here
   };
 
@@ -76,7 +96,9 @@ const Register = () => {
           />
           {errors.phone && <p>{errors.phone.message}</p>}
 
-          <button type="submit">Register</button>
+          <button type="submit" disabled={isLoading}>
+            {isLoading ? "Registering..." : "Register"}
+          </button>
           <p style={{ textAlign: "center", marginTop: 8 }}>
             Already have an account? <Link to="/login">Login</Link>
           </p>

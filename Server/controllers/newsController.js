@@ -3,8 +3,26 @@ import categories from "../model/category.js";
 import reporters from "../model/reporter.js";
 import Images from "../model/images.js";
 export const getAllNews = async (req, res) => {
-  const news = await News.findAll();
-  res.status(201).json({ data: news });
+  const data = await News.findAll({
+    include: [
+      { model: categories, as: "category" },
+      { model: Images, as: "image" },
+      { model: reporters, as: "reporter" },
+    ],
+  });
+  // Check if data exists
+  if (data.length === 0) {
+    return res
+      .status(404)
+      .json({ message: "No data found for the given reporterId" });
+  }
+  const result = data.map((news) => {
+    return {
+      ...news.toJSON(),
+      imageUrl: news.image ? `/uploads/${news.image.filename}` : null,
+    };
+  });
+  res.status(200).json({ data: result });
 };
 
 export const getNewsById = async (req, res) => {
@@ -40,21 +58,22 @@ export const getNewsById = async (req, res) => {
 };
 export const getNewsByCategory = async (req, res) => {
   const category = req.params.category;
-
   try {
+    const categoryId = await categories.findOne({
+      where: { category_name: category },
+    });
+    if (categoryId === null || categoryId.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No data found for the given categoryName" });
+    }
+    console.log(categoryId.dataValues.categoryId);
     const data = await News.findAll({
+      where: { categoryId: categoryId.dataValues.categoryId },
       include: [
-        {
-          model: categories,
-          as: "category",
-          where: {
-            category_name: category,
-          },
-        },
-        {
-          model: reporters,
-          as: "reporter",
-        },
+        { model: categories, as: "category" },
+        { model: Images, as: "image" },
+        { model: reporters, as: "reporter" },
       ],
     });
 
@@ -63,7 +82,13 @@ export const getNewsByCategory = async (req, res) => {
         .status(404)
         .json({ success: false, message: "News not found" });
     }
-    res.status(200).json({ success: true, data: data });
+    const result = data.map((news) => {
+      return {
+        ...news.toJSON(),
+        imageUrl: news.image ? `/uploads/${news.image.filename}` : null,
+      };
+    });
+    res.status(200).json({ data: result });
   } catch (error) {
     console.log("Error in getProduct function", error);
     res.status(500).json({ success: false, message: "Internal Server Error" });

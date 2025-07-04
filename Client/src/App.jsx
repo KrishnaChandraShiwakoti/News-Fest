@@ -1,5 +1,12 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { Error, HomeLayout, Landing, Login, Register } from "./core/public";
+import {
+  CategoriesPage,
+  Error,
+  HomeLayout,
+  Landing,
+  Login,
+  Register,
+} from "./core/public";
 
 function App() {
   const router = createBrowserRouter([
@@ -11,6 +18,10 @@ function App() {
         {
           index: true,
           element: <Landing />,
+        },
+        {
+          path: "category/:name",
+          element: <CategoriesPage />,
         },
       ],
     },

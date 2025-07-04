@@ -6,6 +6,8 @@ const saltRounds = 10;
 
 export const register = async (req, res) => {
   const { fullname, username, email, password, phone } = req.body;
+  console.log(req.body);
+
   if (
     fullname == null ||
     username == null ||
@@ -30,7 +32,7 @@ export const register = async (req, res) => {
         email,
         username,
         password: hash,
-        phone,
+        contact: phone,
       });
       return res.status(201).json({ message: "User registered successfully" });
     }
@@ -38,6 +40,8 @@ export const register = async (req, res) => {
 };
 
 export const login = async (req, res) => {
+  console.log(req.body);
+
   try {
     if (req.body.email == null) {
       return res.status(500).json({ message: "email is required" });

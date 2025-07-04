@@ -31,6 +31,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // }
 
 //middleWare
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan("dev"));
