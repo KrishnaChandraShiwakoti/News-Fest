@@ -2,6 +2,7 @@ import News from "./news.js";
 import Reporter from "./reporter.js";
 import Category from "./category.js";
 import Images from "./images.js";
+import Bookmarks from "./Bookmark.js";
 
 // Reporter - News
 Reporter.hasMany(News, {
@@ -25,3 +26,5 @@ News.belongsTo(Category, {
 
 //news-image
 News.belongsTo(Images, { foreignKey: "imageId", as: "image" });
+Bookmarks.belongsTo(News, { foreignKey: "newsId" });
+// Optionally, News.hasMany(Bookmarks, { foreignKey: "newsId" });

@@ -1,19 +1,57 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { news } from "../../Utils/axios";
+import { useNavigate, useParams } from "react-router-dom";
+import { bookmark, news } from "../../Utils/axios";
 import "../../Styles/CategoriesPage.css";
+import { toast } from "react-toastify";
 
 function CategoriesPage() {
   const { name } = useParams();
   const [items, setItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [bookmarkedIds, setBookmarkedIds] = useState([]);
+  const user = JSON.parse(localStorage.getItem("user"));
+  console.log(user);
+
+  const BEARER_TOKEN = localStorage.getItem("token");
+  const navigate = useNavigate();
+
   useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+    setIsLoading(true);
     setItems([]);
     const fetchNews = async () => {
-      const res = await news.get(`/category/${name}`);
-      setItems(res.data.data);
+      try {
+        const res = await news.get(`/category/${name}`);
+        setItems(res.data.data);
+        setIsLoading(false);
+      } catch (error) {
+        setIsLoading(false);
+        console.log(error);
+      }
     };
     fetchNews();
   }, [name]);
+  console.log(items);
+  const addToBookmark = async (newsId) => {
+    const data = {
+      userId: user.id,
+      newsId,
+    };
+    try {
+      await bookmark.post("/", data, {
+        headers: { Authorization: `Bearer ${BEARER_TOKEN}` },
+      });
+      toast.success("added successfully");
+      setBookmarkedIds((prev) => [...prev, newsId]);
+    } catch (error) {
+      toast.error("unable to add to bookmark");
+      console.log(error);
+    }
+  };
+
+  if (isLoading) return <div className="landing-main">Loading...</div>;
   return (
     <div>
       <h1 className="title">{name}</h1>
@@ -21,18 +59,25 @@ function CategoriesPage() {
       {items.length != 0 ? (
         items.map((item) => {
           return (
-            <div className="news-container" key={item.newsId}>
+            <div
+              className={`news-container${
+                bookmarkedIds.includes(item.id) ? " bookmarked" : ""
+              }`}
+              key={item.id}>
               <div className="news-content">
                 <h2>{item.title}</h2>
-                <p className="news-reporter">
-                  {item.reporter.reporter_fullname}
-                </p>
+                <p className="news-reporter">{item.reporter}</p>
                 <p className="news-snippet">
                   {item.content.slice(0, 400)}
                   {item.content.length > 400 ? "..." : ""}
                 </p>
                 <div className="news-actions">
-                  <button className="bookmark-btn" title="Bookmark">
+                  <button
+                    className="bookmark-btn"
+                    title="Bookmark"
+                    onClick={() => {
+                      addToBookmark(item.id);
+                    }}>
                     <svg
                       width="22"
                       height="22"

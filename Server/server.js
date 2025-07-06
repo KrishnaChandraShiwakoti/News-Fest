@@ -3,13 +3,12 @@ import bodyParser from "body-parser";
 import morgan from "morgan";
 import cors from "cors";
 import newsRouter from "./routes/newsRoutes.js";
-import db from "./config/db.js";
 import "./model/index.js";
-import News from "./model/news.js";
 import adminAuthRouter from "./routes/adminAuthRoutes.js";
 import path from "path";
 import authRouter from "./routes/authRoutes.js";
 import { fileURLToPath } from "url";
+import bookmarkRoutes from "./routes/bookmarkRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,7 +30,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // }
 
 //middleWare
-
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan("dev"));
@@ -43,6 +42,7 @@ app.listen(3000, () => {
 app.use("/api/news", newsRouter);
 app.use("/admin", adminAuthRouter);
 app.use("/auth", authRouter);
+app.use("/bookmark", bookmarkRoutes);
 // Home route
 app.get("/", (req, res) => {
   res.send("Hello from server side");

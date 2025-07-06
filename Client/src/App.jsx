@@ -7,6 +7,7 @@ import {
   Login,
   Register,
 } from "./core/public";
+import BookmarkPage from "./core/private/BookmarkPage";
 
 function App() {
   const router = createBrowserRouter([
@@ -22,6 +23,10 @@ function App() {
         {
           path: "category/:name",
           element: <CategoriesPage />,
+        },
+        {
+          path: "user/bookmark",
+          element: <BookmarkPage />,
         },
       ],
     },

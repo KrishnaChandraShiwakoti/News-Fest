@@ -6,7 +6,8 @@ import { Link, useLocation } from "react-router-dom";
 
 const Landing = () => {
   const [items, setItems] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(2);
+
   // const location = useLocation();
   // const currentPath = location.pathname;
 

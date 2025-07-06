@@ -84,11 +84,17 @@ export const getNewsByCategory = async (req, res) => {
     }
     const result = data.map((news) => {
       return {
-        ...news.toJSON(),
+        id: news.newsId,
+        title: news.title,
+        content: news.content,
         imageUrl: news.image ? `/uploads/${news.image.filename}` : null,
+        reporter: news.reporter.reporter_fullname,
       };
     });
-    res.status(200).json({ data: result });
+
+    res.status(200).json({
+      data: result,
+    });
   } catch (error) {
     console.log("Error in getProduct function", error);
     res.status(500).json({ success: false, message: "Internal Server Error" });

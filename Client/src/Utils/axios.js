@@ -6,3 +6,6 @@ export const auth = axios.create({
 export const news = axios.create({
   baseURL: "http://localhost:3000/api/news",
 });
+export const bookmark = axios.create({
+  baseURL: "http://localhost:3000/bookmark",
+});

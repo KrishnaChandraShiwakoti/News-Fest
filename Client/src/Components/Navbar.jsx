@@ -70,7 +70,7 @@ const Navbar = () => {
                   <Link to="/account" onClick={() => setShowModal(false)}>
                     Account
                   </Link>
-                  <Link to="/bookmark" onClick={() => setShowModal(false)}>
+                  <Link to="user/bookmark" onClick={() => setShowModal(false)}>
                     Bookmark
                   </Link>
                   <button className="logout-btn" onClick={handleLogout}>

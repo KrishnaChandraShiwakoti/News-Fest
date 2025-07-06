@@ -4,11 +4,17 @@ import "../../Styles/AddNews.css";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { news } from "../../Utils/axios";
+import { useEffect } from "react";
 const AddNews = () => {
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const navigate = useNavigate();
-
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+      navigate("/login");
+    }
+  }, []);
   const {
     register,
     handleSubmit,

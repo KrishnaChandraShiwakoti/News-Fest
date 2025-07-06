@@ -11,6 +11,12 @@
   gap: 24px;
   position: relative;
 }
+.news-container.bookmarked {
+  border: 2px solid #fe1b1b;
+  box-shadow: 0 2px 16px 0 #fe1b1b22;
+  background: #fff6f6;
+  transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+}
 .news-content {
   flex: 1 1 0;
   min-width: 0;

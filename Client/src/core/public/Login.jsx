@@ -29,7 +29,7 @@ const Login = () => {
           JSON.stringify({
             name: res.data.fullname,
             email: res.data.email,
-            id: res.data.id,
+            id: res.data.user_id,
           })
         );
         localStorage.setItem("token", res.data.token);
