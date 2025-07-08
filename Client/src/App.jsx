@@ -14,6 +14,7 @@ import EmailChecker from "./Components/EmailChecker";
 import VerifyOtp from "./Components/VerifyOtp";
 import ResetPassword from "./Components/ResetPassword";
 import { PasswordResetProvider } from "./Components/PasswordResetContext";
+import UpdateProfile from "./core/private/UpdateProfile";
 
 function App() {
   const router = createBrowserRouter([
@@ -33,6 +34,10 @@ function App() {
         {
           path: "user/bookmark",
           element: <BookmarkPage />,
+        },
+        {
+          path: "/account",
+          element: <UpdateProfile />,
         },
       ],
     },
