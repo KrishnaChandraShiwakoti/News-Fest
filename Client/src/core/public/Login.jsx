@@ -75,7 +75,7 @@ const Login = () => {
             <label>
               <input type="checkbox" /> Remember me
             </label>
-            <Link to="#">Forgot password?</Link>
+            <Link to="/forgetPassword">Forgot password?</Link>
           </div>
 
           <button type="submit" disabled={isLoading}>

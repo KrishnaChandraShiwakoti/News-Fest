@@ -1,0 +1,57 @@
+/* VerifyOtp Component Styles */
+.verify-otp-container {
+  max-width: 400px;
+  margin: 60px auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.08);
+  padding: 32px 24px 28px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.verify-otp-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #232526;
+  margin-bottom: 24px;
+}
+.verify-otp-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.verify-otp-input {
+  padding: 12px 14px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1.08rem;
+  outline: none;
+  transition: border 0.2s;
+  letter-spacing: 0.2em;
+  text-align: center;
+}
+.verify-otp-input:focus {
+  border: 1.5px solid #007bff;
+}
+.verify-otp-btn {
+  padding: 12px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.verify-otp-btn:disabled {
+  background: #b2d1ff;
+  cursor: not-allowed;
+}
+.verify-otp-error {
+  color: #e74c3c;
+  font-size: 1rem;
+  margin: 0;
+  text-align: left;
+}

@@ -16,9 +16,6 @@ function CategoriesPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    }
     setIsLoading(true);
     setItems([]);
     const fetchNews = async () => {

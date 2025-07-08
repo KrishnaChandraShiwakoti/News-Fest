@@ -8,6 +8,6 @@ import "./Styles/Global.css";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <App />
-    <ToastContainer position="top-center" autoClose="200" />
+    <ToastContainer position="top-center" autoClose="500" />
   </StrictMode>
 );

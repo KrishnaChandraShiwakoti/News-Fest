@@ -29,6 +29,9 @@ const User = db.define("User", {
     type: DataTypes.BIGINT,
     allowNull: false,
   },
+  otp: {
+    type: DataTypes.INTEGER,
+  },
 });
 
 export default User;

@@ -9,10 +9,12 @@ import path from "path";
 import authRouter from "./routes/authRoutes.js";
 import { fileURLToPath } from "url";
 import bookmarkRoutes from "./routes/bookmarkRoutes.js";
+import db from "./config/db.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
+const allowedOrigins = ["http://localhost:5173", "http://localhost:5174"];
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
@@ -30,11 +32,23 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // }
 
 //middleWare
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan("dev"));
-app.use(cors());
 app.listen(3000, () => {
   console.log("server is listening in port 3000 ");
 });
