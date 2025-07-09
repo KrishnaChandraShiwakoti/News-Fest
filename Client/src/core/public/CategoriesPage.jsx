@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { bookmark, news } from "../../Utils/axios";
 import "../../Styles/CategoriesPage.css";
 import { toast } from "react-toastify";
+import SingleNewsPage from "../../Components/SingleNewsPage";
 
 function CategoriesPage() {
   const { name } = useParams();
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [bookmarkedIds, setBookmarkedIds] = useState([]);
+  const [selectedNews, setSelectedNews] = useState(null);
   const user = JSON.parse(localStorage.getItem("user"));
-  console.log(user);
 
   const BEARER_TOKEN = localStorage.getItem("token");
-  const navigate = useNavigate();
 
   useEffect(() => {
     setIsLoading(true);
@@ -24,13 +24,13 @@ function CategoriesPage() {
         setItems(res.data.data);
         setIsLoading(false);
       } catch (error) {
-        setIsLoading(false);
         console.log(error);
+
+        setIsLoading(false);
       }
     };
     fetchNews();
   }, [name]);
-  console.log(items);
   const addToBookmark = async (newsId) => {
     const data = {
       userId: user.id,
@@ -47,12 +47,35 @@ function CategoriesPage() {
       console.log(error);
     }
   };
-
+  const handleShare = (news) => {
+    if (navigator.share) {
+      navigator.share({
+        title: news.title,
+        text: news.content.slice(0, 100),
+        url: window.location.href,
+      });
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      toast.info("Link copied to clipboard");
+    }
+  };
   if (isLoading) return <div className="landing-main">Loading...</div>;
   return (
     <div>
       <h1 className="title capitalize">{name}</h1>
-      {/* Fetch and display category data based on 'name' */}
+      {selectedNews && (
+        <SingleNewsPage
+          news={{
+            ...selectedNews,
+            imageUrl: `http://localhost:3000${selectedNews.imageUrl}`,
+            category: name,
+          }}
+          onClose={() => setSelectedNews(null)}
+          onBookmark={() => addToBookmark(selectedNews.id)}
+          onShare={() => handleShare(selectedNews)}
+          isBookmarked={bookmarkedIds.includes(selectedNews.id)}
+        />
+      )}
       {items.length != 0 ? (
         items.map((item) => {
           return (
@@ -60,7 +83,9 @@ function CategoriesPage() {
               className={`news-container${
                 bookmarkedIds.includes(item.id) ? " bookmarked" : ""
               }`}
-              key={item.id}>
+              key={item.id}
+              onClick={() => setSelectedNews(item)}
+              style={{ cursor: "pointer" }}>
               <div className="news-content">
                 <h2>{item.title}</h2>
                 <p className="news-reporter">{item.reporter}</p>
@@ -68,7 +93,9 @@ function CategoriesPage() {
                   {item.content.slice(0, 400)}
                   {item.content.length > 400 ? "..." : ""}
                 </p>
-                <div className="news-actions">
+                <div
+                  className="news-actions"
+                  onClick={(e) => e.stopPropagation()}>
                   <button
                     className="bookmark-btn"
                     title="Bookmark"
@@ -87,7 +114,10 @@ function CategoriesPage() {
                       <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
                     </svg>
                   </button>
-                  <button className="share-btn" title="Share">
+                  <button
+                    className="share-btn"
+                    title="Share"
+                    onClick={() => handleShare(item)}>
                     <svg
                       width="22"
                       height="22"

@@ -2,14 +2,17 @@ import express from "express";
 import bodyParser from "body-parser";
 import morgan from "morgan";
 import cors from "cors";
-import newsRouter from "./routes/newsRoutes.js";
 import "./model/index.js";
-import adminAuthRouter from "./routes/adminAuthRoutes.js";
 import path from "path";
-import authRouter from "./routes/authRoutes.js";
 import { fileURLToPath } from "url";
-import bookmarkRoutes from "./routes/bookmarkRoutes.js";
 import db from "./config/db.js";
+import {
+  adminAuthRoutes,
+  authRoutes,
+  bookmarkRoutes,
+  newsRoutes,
+  userRoutes,
+} from "./routes/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -53,10 +56,11 @@ app.listen(3000, () => {
   console.log("server is listening in port 3000 ");
 });
 
-app.use("/api/news", newsRouter);
-app.use("/admin", adminAuthRouter);
-app.use("/auth", authRouter);
+app.use("/api/news", newsRoutes);
+app.use("/admin", adminAuthRoutes);
+app.use("/auth", authRoutes);
 app.use("/bookmark", bookmarkRoutes);
+app.use("/api/user", userRoutes);
 // Home route
 app.get("/", (req, res) => {
   res.send("Hello from server side");

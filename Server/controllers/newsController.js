@@ -56,7 +56,7 @@ export const getNewsById = async (req, res) => {
   }
 };
 export const getNewsByCategory = async (req, res) => {
-  const category = req.params.category;
+  const category = req.params.category.toLowerCase();
   try {
     const categoryId = await categories.findOne({
       where: { category_name: category },
