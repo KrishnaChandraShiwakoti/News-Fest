@@ -51,7 +51,7 @@ function CategoriesPage() {
   if (isLoading) return <div className="landing-main">Loading...</div>;
   return (
     <div>
-      <h1 className="title">{name}</h1>
+      <h1 className="title capitalize">{name}</h1>
       {/* Fetch and display category data based on 'name' */}
       {items.length != 0 ? (
         items.map((item) => {

@@ -22,7 +22,9 @@ const ResetPassword = () => {
       setOtpVerified(false);
       navigate("/forgetPassword");
     }
-  }, [email, otpVerified, navigate, setEmail, setOtpVerified]);
+  }, []);
+
+  // }, [email, otpVerified, navigate, setEmail, setOtpVerified]);
 
   const onSubmit = async (data) => {
     try {

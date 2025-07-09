@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "Server/server.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "test": "jest"
   },
   "type": "module",
   "keywords": [],
@@ -20,12 +21,15 @@
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "helmet": "^8.1.0",
+    "jest": "^30.0.4",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "multer": "^2.0.1",
     "nodemailer": "^7.0.4",
     "nodemon": "^3.1.10",
     "pg": "^8.16.0",
-    "sequelize": "^6.37.7"
+    "sequelize": "^6.37.7",
+    "sequelize-mock": "^0.10.2",
+    "supertest": "^7.1.3"
   }
 }

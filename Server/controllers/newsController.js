@@ -24,7 +24,6 @@ export const getAllNews = async (req, res) => {
   });
   res.status(200).json({ data: result });
 };
-
 export const getNewsById = async (req, res) => {
   const id = req.params.id;
   try {
