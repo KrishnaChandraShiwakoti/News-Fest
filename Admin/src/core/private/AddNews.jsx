@@ -105,6 +105,10 @@ const AddNews = () => {
             {...register("category", { required: "category is required" })}>
             <option value="world">world</option>
             <option value="news">news</option>
+            <option value="world">Entertainment</option>
+            <option value="news">Sports</option>
+            <option value="world">Education</option>
+            <option value="world">Finance</option>
           </select>
         </div>
       </div>

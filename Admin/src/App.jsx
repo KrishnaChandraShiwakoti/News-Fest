@@ -4,6 +4,8 @@ import "./Styles/App.css";
 import Settings from "./core/private/Settings";
 import ProfileForm from "./Components/Profile/ProfileForm";
 import AccountSettings from "./Components/Profile/AccountSettings";
+import EditNews from "./core/private/EditNews";
+import Analytics from "./core/private/Analytics";
 
 function App() {
   const router = createBrowserRouter([
@@ -21,8 +23,16 @@ function App() {
           element: <News />,
         },
         {
+          path: "analytics",
+          element: <Analytics />,
+        },
+        {
           path: "news/add",
           element: <AddNews />,
+        },
+        {
+          path: "news/edit/:id",
+          element: <EditNews />,
         },
         {
           path: "/settings",

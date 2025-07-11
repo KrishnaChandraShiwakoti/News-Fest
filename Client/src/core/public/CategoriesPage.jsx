@@ -61,7 +61,7 @@ function CategoriesPage() {
   };
   if (isLoading) return <div className="landing-main">Loading...</div>;
   return (
-    <div>
+    <div className="main-container">
       <h1 className="title capitalize">{name}</h1>
       {selectedNews && (
         <SingleNewsPage

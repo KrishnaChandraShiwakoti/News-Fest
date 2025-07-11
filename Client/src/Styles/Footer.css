@@ -1,20 +1,96 @@
-.footer {
-  background-color: #212121;
-  color: #ffffff;
-  gap: 30px;
-  justify-content: space-evenly;
+/* Modern Footer for NewsFest */
+footer.landing-footer {
+  max-width: 1200px;
+  margin: 0px auto;
+  background: #232526;
+  color: #fff;
+  padding: 2.5rem 1.2rem 0rem 1.2rem;
+  margin-top: 2.5rem;
 }
-.about-us {
-  margin-left: 100px;
+.landing-footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5rem;
+  justify-content: space-between;
+  align-items: flex-start;
 }
-.about-us p {
-  max-width: 200px;
+.landing-footer-about {
+  flex: 2;
+  min-width: 220px;
 }
-.categories li {
+.landing-footer-about h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.7rem;
+}
+.landing-footer-about p {
+  font-size: 1rem;
+  color: #e2e8f0;
+  line-height: 1.6;
+  max-width: 320px;
+}
+.landing-footer-categories {
+  flex: 1.2;
+  min-width: 180px;
+}
+.landing-footer-categories h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.7rem;
+}
+.landing-footer-categories-list {
   list-style: none;
-  margin-bottom: 10px;
+  padding: 0;
+  margin: 0;
 }
-.categories li a {
-  text-decoration: none;
-  color: #ffffff;
+.landing-footer-categories-list .landing-navbar-link-item {
+  margin-bottom: 0.5rem;
+}
+.landing-footer-categories-list .landing-navbar-link {
+  color: #e2e8f0;
+  background: none;
+  padding: 0.2rem 0.7rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background 0.18s, color 0.18s;
+}
+.landing-footer-categories-list .landing-navbar-link:hover,
+.landing-footer-categories-list .landing-navbar-link.active {
+  background: #fe1b1b;
+  color: #fff;
+}
+.landing-footer-meta {
+  flex: 1;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 0.7rem;
+}
+.landing-footer-logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.landing-footer-logo span {
+  color: #fe1b1b;
+}
+.landing-footer-copyright {
+  font-size: 0.98rem;
+  color: #e2e8f0;
+}
+@media (max-width: 900px) {
+  .landing-footer-inner {
+    flex-direction: column;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+  .landing-footer-meta {
+    align-items: flex-start;
+    margin-top: 1.2rem;
+  }
 }

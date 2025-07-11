@@ -18,8 +18,11 @@ export const getAllNews = async (req, res) => {
   }
   const result = data.map((news) => {
     return {
-      ...news.toJSON(),
+      id: news.newsId,
+      title: news.title,
+      content: news.content,
       imageUrl: news.image ? `/uploads/${news.image.filename}` : null,
+      reporter: news.reporter.reporter_fullname,
     };
   });
   res.status(200).json({ data: result });

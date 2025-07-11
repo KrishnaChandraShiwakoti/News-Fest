@@ -30,23 +30,21 @@ const News = () => {
     };
     fetchArticles();
   }, []);
-  console.log(articles);
 
   const data = useMemo(() => articles, [articles]);
-  console.log(data);
 
   const columns = [
-    { name: "Title", selector: (row) => row.Title },
-    { name: "Category", selector: (row) => row.Category },
+    { name: "Title", selector: (row) => row.title },
+    { name: "Category", selector: (row) => row.category.category_name },
     // { name: "Role", selector: (row) => row.role },
     // { name: "Status", selector: (row) => row.status },
     {
       name: "Actions",
       cell: (row) => (
         <>
-          <Link to={`/users/${row.id}`}>View</Link>
-          <Link to={`/users/${row.id}/edit`}>Edit</Link>|{""}
-          <button onClick={() => onDelete(row.id)}>Delete</button>
+          <Link to={`/news/${row.newsId}`}>View</Link>
+          <Link to={`edit/${row.newsId}`}>Edit</Link>|{""}
+          <button onClick={() => onDelete(row.newsId)}>Delete</button>
         </>
       ),
     },

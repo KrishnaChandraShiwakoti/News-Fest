@@ -18,7 +18,7 @@ const Dashboard = () => {
       id: 1,
       title: "Total News",
       icon: <LuNewspaper />,
-      detail: 5,
+      detail: articles.length,
     },
     {
       id: 2,
@@ -101,7 +101,12 @@ const Dashboard = () => {
                   </div>
                   <div className="news-footer">
                     <p>{news.category.category_name}</p>
-                    <button>edit</button>
+                    <button
+                      onClick={() => {
+                        navigate(`news/edit/${news.newsId}`);
+                      }}>
+                      edit
+                    </button>
                   </div>
                 </div>
               );

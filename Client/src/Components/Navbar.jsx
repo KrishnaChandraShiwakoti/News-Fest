@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 const Navbar = () => {
   const [user, setUser] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const modalRef = useRef();
 
   useEffect(() => {
@@ -33,22 +34,51 @@ const Navbar = () => {
   };
 
   return (
-    <nav>
-      <div className="logo">
-        <Link to="/">
-          <span>News</span>Fest
-        </Link>
-      </div>
-      <div className="navbar flex">
-        <div className="flex links">
-          <Navlinks />
+    <nav className="landing-navbar">
+      <div className="landing-navbar-inner">
+        <div className="landing-navbar-logo">
+          <Link to="/">
+            <span>News</span>Fest
+          </Link>
         </div>
-        <div className="auth flex">
+        <button
+          className={`landing-navbar-hamburger${mobileOpen ? " open" : ""}`}
+          aria-label="Open menu"
+          onClick={() => setMobileOpen((v) => !v)}>
+          <span />
+          <span />
+          <span />
+        </button>
+        <ul
+          className={`landing-navbar-links${mobileOpen ? " mobile-open" : ""}`}>
+          {mobileOpen && (
+            <button
+              className="landing-navbar-close"
+              aria-label="Close menu"
+              onClick={() => setMobileOpen(false)}>
+              <span></span>
+              <span></span>
+            </button>
+          )}
+          <Navlinks />
+        </ul>
+        <div
+          className={`landing-navbar-auth${mobileOpen ? " mobile-open" : ""}`}>
           {!user ? (
             <>
-              <Link to="/login">login</Link>
-              <span>/</span>
-              <Link to="/register">Register</Link>
+              <Link
+                to="/login"
+                className="landing-navbar-auth-link"
+                onClick={() => setMobileOpen(false)}>
+                Login
+              </Link>
+              <span className="landing-navbar-auth-divider">/</span>
+              <Link
+                to="/register"
+                className="landing-navbar-auth-link"
+                onClick={() => setMobileOpen(false)}>
+                Register
+              </Link>
             </>
           ) : (
             <div className="profile-menu-wrap">
@@ -82,6 +112,13 @@ const Navbar = () => {
           )}
         </div>
       </div>
+      {/* Overlay for mobile menu */}
+      {mobileOpen && (
+        <div
+          className="landing-navbar-mobile-overlay"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
     </nav>
   );
 };

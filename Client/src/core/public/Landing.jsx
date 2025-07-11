@@ -7,36 +7,29 @@ import { Link } from "react-router-dom";
 
 const Landing = () => {
   const [items, setItems] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("News");
   const [selectedNews, setSelectedNews] = useState(null);
-  const [itemsByCategory, setItemsByCategory] = useState([]);
+  const [topStories, setTopStories] = useState([]);
+  const [latest, setLatest] = useState([]);
+  const [editorsPick, setEditorsPick] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     const fetchNews = async () => {
-      const res = await news.get("/");
-      setItems(res.data.data);
+      setIsLoading(true);
+      try {
+        const res = await news.get("/");
+        setItems(res.data.data);
+        setTopStories(res.data.data.slice(0, 4));
+        setLatest(res.data.data.slice(4, 10));
+        setEditorsPick(res.data.data.slice(10, 14));
+      } catch (e) {
+        setItems([]);
+      }
+      setIsLoading(false);
     };
     fetchNews();
   }, []);
-
-  useEffect(() => {
-    setIsLoading(true);
-    const fetchNews = async () => {
-      try {
-        const res = await news.get(`/category/${selectedCategory}`);
-        setIsLoading(false);
-        setItemsByCategory(res.data.data);
-      } catch (error) {
-        setItemsByCategory([]);
-        console.log(error);
-        setIsLoading(false);
-      }
-    };
-    fetchNews();
-  }, [selectedCategory]);
-  console.log(itemsByCategory);
-
-  if (!items.length) return <div className="landing-main">Loading...</div>;
+  console.log(items);
 
   const handleShare = (news) => {
     if (navigator.share) {
@@ -51,14 +44,16 @@ const Landing = () => {
     }
   };
 
+  if (isLoading) return <div className="landing-main">Loading...</div>;
+
   return (
-    <>
+    <div className="landing-bbc-cnn-style">
       {selectedNews && (
         <SingleNewsPage
           news={{
             ...selectedNews,
             imageUrl: `http://localhost:3000${selectedNews.imageUrl}`,
-            category: selectedNews.category?.category_name || "General",
+            category: selectedNews?.category || "General",
           }}
           onClose={() => setSelectedNews(null)}
           onBookmark={() => {}}
@@ -66,116 +61,98 @@ const Landing = () => {
           isBookmarked={false}
         />
       )}
-
-      <div className="landing-main landing-split-layout">
-        <div className="landing-featured-col">
-          {items[0] && (
+      {/* Top Stories Section */}
+      <section className="landing-top-stories">
+        <h2 className="landing-section-title">Top Stories</h2>
+        <div className="landing-top-stories-grid">
+          {topStories.map((item, idx) => (
             <div
-              className="landing-featured"
-              onClick={() => setSelectedNews(items[0])}
-              style={{ cursor: "pointer" }}>
-              <div className="landing-img-wrap">
-                <img
-                  src={`http://localhost:3000${items[0].imageUrl}`}
-                  alt={items[0].title}
-                  className="landing-img"
-                />
-                <span className="landing-category-badge right">
-                  {items[0].category?.category_name || "General"}
-                </span>
-              </div>
-              <div className="landing-title">{items[0].title}</div>
-              <div className="landing-meta">
-                By {items[0].reporter?.reporter_fullname || "Unknown"}
-              </div>
-            </div>
-          )}
-        </div>
-        <div className="landing-side-list-col">
-          {items.slice(1, 4).map((item, idx) => (
-            <div
-              className="landing-side-item"
-              key={item.newsId || idx}
-              onClick={() => setSelectedNews(item)}
-              style={{ cursor: "pointer" }}>
-              <div className="landing-img-wrap">
-                <img
-                  src={`http://localhost:3000${item.imageUrl}`}
-                  alt={item.title}
-                  className="landing-img"
-                />
-                <span className="landing-category-badge right">
-                  {item.category?.category_name || "General"}
-                </span>
-              </div>
-              <div
-                className="landing-title"
-                style={{ fontSize: "1.1rem", marginBottom: 4 }}>
-                {item.title}
-              </div>
-              <div className="landing-meta">
-                By {item.reporter?.reporter_fullname || "Unknown"}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className="landing-categories-bar">
-        {categories.slice(1, categories.length).map((cat) => (
-          <button
-            type="button"
-            className={`landing-category-link-bar${
-              selectedCategory === cat.text ? " selected" : ""
-            }`}
-            key={cat.id}
-            onClick={() => setSelectedCategory(cat.text)}>
-            {cat.text}
-          </button>
-        ))}
-      </div>
-      {/* View All link above */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          margin: "0.5rem 0 0.2rem 0",
-        }}>
-        <Link to={`/category/${selectedCategory}`} className="view-all-link">
-          View All
-        </Link>
-      </div>
-      {/* Mapped items by category (cards) */}
-      {isLoading ? (
-        <div>Loading</div>
-      ) : itemsByCategory.length !== 0 ? (
-        <div className="landing-category-items-list">
-          {(itemsByCategory || []).slice(0, 4).map((item, idx) => (
-            <div
-              className="landing-category-item-card"
+              className={`landing-top-story-card${
+                idx === 0 ? " featured" : ""
+              }`}
               key={item.newsId || idx}
               onClick={() => setSelectedNews(item)}>
               <img
                 src={`http://localhost:3000${item.imageUrl}`}
                 alt={item.title}
-                className="landing-category-item-img"
+                className="landing-top-story-img"
               />
-              <div className="landing-category-item-title">{item.title}</div>
-              <div className="landing-category-item-snippet">
-                {item.content?.slice(0, 40)}
-                {item.content?.length > 40 ? "..." : ""}
-              </div>
-              <div className="landing-category-item-reporter">
-                By {item.reporter?.reporter_fullname || "Unknown"}
+              <div className="landing-top-story-content">
+                <span className="landing-category-badge">
+                  {item.category?.category_name || "General"}
+                </span>
+                <h3 className="landing-top-story-title">{item.title}</h3>
+                <div className="landing-top-story-meta">
+                  By {item.reporter?.reporter_fullname || "Unknown"}
+                </div>
+                <div className="landing-top-story-snippet">
+                  {item.content?.slice(0, 90)}
+                  {item.content?.length > 90 ? "..." : ""}
+                </div>
               </div>
             </div>
           ))}
         </div>
-      ) : (
-        <div className="news-container">
-          <p>No news in this Category</p>
+      </section>
+      {/* Latest News Section */}
+      <section className="landing-latest-section">
+        <div className="landing-section-header">
+          <h2 className="landing-section-title">Latest News</h2>
+          <Link to="/category/News" className="view-all-link">
+            View All
+          </Link>
         </div>
-      )}
-    </>
+        <div className="landing-latest-list">
+          {latest.map((item, idx) => (
+            <div
+              className="landing-latest-card"
+              key={item.newsId || idx}
+              onClick={() => setSelectedNews(item)}>
+              <img
+                src={`http://localhost:3000${item.imageUrl}`}
+                alt={item.title}
+                className="landing-latest-img"
+              />
+              <div className="landing-latest-content">
+                <h4 className="landing-latest-title">{item.title}</h4>
+                <div className="landing-latest-meta">
+                  By {item.reporter?.reporter_fullname || "Unknown"}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+      {/* Editors' Picks Section */}
+      <section className="landing-editors-pick-section">
+        <div className="landing-section-header">
+          <h2 className="landing-section-title">Editors' Picks</h2>
+          <Link to="/category/EditorsPick" className="view-all-link">
+            View All
+          </Link>
+        </div>
+        <div className="landing-editors-pick-list">
+          {editorsPick.map((item, idx) => (
+            <div
+              className="landing-editors-pick-card"
+              key={item.newsId || idx}
+              onClick={() => setSelectedNews(item)}>
+              <img
+                src={`http://localhost:3000${item.imageUrl}`}
+                alt={item.title}
+                className="landing-editors-pick-img"
+              />
+              <div className="landing-editors-pick-content">
+                <h4 className="landing-editors-pick-title">{item.title}</h4>
+                <div className="landing-editors-pick-meta">
+                  By {item.reporter?.reporter_fullname || "Unknown"}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
   );
 };
 

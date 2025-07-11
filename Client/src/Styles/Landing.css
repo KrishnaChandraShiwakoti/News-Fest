@@ -373,3 +373,208 @@
     height: 44px;
   }
 }
+
+/* Modern BBC/CNN-inspired landing page */
+.landing-bbc-cnn-style {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2.5rem 1.2rem 2rem 1.2rem;
+  background: #f7fafd;
+}
+.landing-section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a202c;
+  margin-bottom: 1.2rem;
+  letter-spacing: 0.5px;
+}
+.landing-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.7rem;
+}
+.view-all-link {
+  color: #3182ce;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.18s;
+}
+.view-all-link:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+/* Top Stories */
+.landing-top-stories {
+  margin-bottom: 2.5rem;
+}
+.landing-top-stories-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 1.3rem;
+}
+.landing-top-story-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.18s, transform 0.18s;
+}
+.landing-top-story-card:hover {
+  box-shadow: 0 6px 24px rgba(49, 130, 206, 0.13);
+  transform: translateY(-2px) scale(1.02);
+}
+.landing-top-story-card.featured {
+  grid-row: span 2;
+  grid-column: span 1;
+}
+.landing-top-story-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+.landing-top-story-content {
+  padding: 1.1rem 1rem 1rem 1rem;
+  position: relative;
+}
+.landing-top-story-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #1a202c;
+}
+.landing-top-story-meta {
+  color: #3182ce;
+  font-size: 0.98rem;
+  margin-bottom: 0.5rem;
+}
+.landing-top-story-snippet {
+  color: #4a5568;
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
+}
+.landing-category-badge {
+  background: #3182ce;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 5px;
+  padding: 0.2rem 0.7rem;
+  margin-bottom: 0.7rem;
+  display: inline-block;
+  position: static;
+  /* Remove absolute/floating styles */
+}
+/* Latest News */
+.landing-latest-section {
+  margin-bottom: 2.5rem;
+}
+.landing-latest-list {
+  display: flex;
+  gap: 1.1rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+.landing-latest-card {
+  min-width: 220px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  cursor: pointer;
+  transition: box-shadow 0.18s, background 0.18s;
+}
+.landing-latest-card:hover {
+  background: #e6f0fa;
+  box-shadow: 0 4px 16px rgba(49, 130, 206, 0.13);
+}
+.landing-latest-img {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 10px 10px 0 0;
+}
+.landing-latest-content {
+  padding: 0.7rem 1rem 1rem 1rem;
+}
+.landing-latest-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #1a202c;
+  margin-bottom: 0.3rem;
+}
+.landing-latest-meta {
+  color: #3182ce;
+  font-size: 0.95rem;
+}
+/* Editors' Picks */
+.landing-editors-pick-section {
+  margin-bottom: 2.5rem;
+}
+.landing-editors-pick-list {
+  display: flex;
+  gap: 1.1rem;
+  flex-wrap: wrap;
+}
+.landing-editors-pick-card {
+  width: 220px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  cursor: pointer;
+  transition: box-shadow 0.18s, background 0.18s;
+}
+.landing-editors-pick-card:hover {
+  background: #e6f0fa;
+  box-shadow: 0 4px 16px rgba(49, 130, 206, 0.13);
+}
+.landing-editors-pick-img {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 10px 10px 0 0;
+}
+.landing-editors-pick-content {
+  padding: 0.7rem 1rem 1rem 1rem;
+}
+.landing-editors-pick-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #1a202c;
+  margin-bottom: 0.3rem;
+}
+.landing-editors-pick-meta {
+  color: #3182ce;
+  font-size: 0.95rem;
+}
+@media (max-width: 900px) {
+  .landing-top-stories-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .landing-editors-pick-list,
+  .landing-latest-list {
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 600px) {
+  .landing-bbc-cnn-style {
+    padding: 1rem 0.2rem;
+  }
+  .landing-top-stories-grid {
+    grid-template-columns: 1fr;
+  }
+  .landing-editors-pick-card,
+  .landing-latest-card {
+    min-width: 100%;
+    width: 100%;
+  }
+}

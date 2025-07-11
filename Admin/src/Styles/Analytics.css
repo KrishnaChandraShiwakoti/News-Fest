@@ -1,0 +1,77 @@
+.top-performing-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+.top-performing-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 0.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #232526;
+}
+.top-performing-item:last-child {
+  border-bottom: none;
+}
+.top-performing-rank {
+  font-weight: 700;
+  color: #fe1b1b;
+  margin-right: 0.7rem;
+}
+.top-performing-title {
+  flex: 1;
+  margin: 0 0.7rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.top-performing-views {
+  color: #3182ce;
+  font-size: 0.98rem;
+  font-weight: 600;
+  margin-left: 0.7rem;
+}
+/* Analytics Page Styles */
+.analytics-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.08);
+}
+.analytics-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #232526;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+.analytics-charts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+}
+.analytics-chart-box {
+  background: #f7f7fa;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
+  padding: 1.5rem 1.2rem;
+  min-width: 320px;
+  flex: 1 1 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.analytics-chart-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #3182ce;
+  text-align: center;
+}

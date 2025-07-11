@@ -5,16 +5,17 @@ import { links } from "../Data/Categories";
 const Navlinks = () => {
   return (
     <>
-      {links.map((link) => {
-        const { id, url, text } = link;
-        return (
-          <li key={id}>
-            <NavLink to={url} className="capitalize">
-              {text}
-            </NavLink>
-          </li>
-        );
-      })}
+      {links.map(({ id, url, text }) => (
+        <li key={id} className="landing-navbar-link-item">
+          <NavLink
+            to={url}
+            className={({ isActive }) =>
+              `landing-navbar-link capitalize${isActive ? " active" : ""}`
+            }>
+            {text}
+          </NavLink>
+        </li>
+      ))}
     </>
   );
 };

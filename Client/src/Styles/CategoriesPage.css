@@ -1,4 +1,9 @@
 /* CategoriesPage styles */
+.main-container {
+  max-width: 1200px;
+  margin: 0px auto;
+}
+
 .news-container {
   display: flex;
   align-items: flex-start;

@@ -1,28 +1,34 @@
 import "../Styles/Footer.css";
 import Navlinks from "./Navlinks";
+
 const Footer = () => {
   return (
-    <div className="footer flex">
-      {/* About us */}
-      <div className="about-us">
-        <h1>About Us</h1>
-        <p>
-          This website is the official news portal of NewsFest. This Nepali
-          language portal covers news, opinions, entertainment, sports, world,
-          information technology, videos and news and analysis from various
-          aspects of life.
-        </p>
+    <footer className="landing-footer">
+      <div className="landing-footer-inner">
+        <div className="landing-footer-about">
+          <h2>About NewsFest</h2>
+          <p>
+            NewsFest is your trusted Nepali news portal for top stories,
+            opinions, entertainment, sports, world, technology, and more. Stay
+            informed with our editors' picks and latest updates.
+          </p>
+        </div>
+        <div className="landing-footer-categories">
+          <h2>Categories</h2>
+          <ul className="landing-footer-categories-list">
+            <Navlinks />
+          </ul>
+        </div>
+        <div className="landing-footer-meta">
+          <div className="landing-footer-logo">
+            <span>News</span>Fest
+          </div>
+          <div className="landing-footer-copyright">
+            &copy; {new Date().getFullYear()} NewsFest. All rights reserved.
+          </div>
+        </div>
       </div>
-      {/* Quick links*/}
-      <div className="quick-links">
-        <h1>Quick Links</h1>
-      </div>
-      {/* Categories*/}
-      <div className="categories">
-        <h1>Categories</h1>
-        <Navlinks />
-      </div>
-    </div>
+    </footer>
   );
 };
 
