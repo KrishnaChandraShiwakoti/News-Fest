@@ -42,8 +42,7 @@ const News = () => {
       name: "Actions",
       cell: (row) => (
         <>
-          <Link to={`/news/${row.newsId}`}>View</Link>
-          <Link to={`edit/${row.newsId}`}>Edit</Link>|{""}
+          <Link to={`edit/${row.newsId}`}>Edit</Link>|{"   "}
           <button onClick={() => onDelete(row.newsId)}>Delete</button>
         </>
       ),

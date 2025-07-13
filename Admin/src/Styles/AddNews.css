@@ -47,6 +47,7 @@
   font-size: 30px;
 }
 .input-section textarea {
+  height: 100%;
   border-radius: 0px 0px 10px 10px;
   padding: 10px;
 }

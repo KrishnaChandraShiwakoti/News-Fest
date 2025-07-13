@@ -30,12 +30,6 @@ const AccountSettings = () => {
       <div className="password-inputs">
         <input
           type="password"
-          placeholder="Old Password"
-          value={oldPassword}
-          onChange={(e) => setOldPassword(e.target.value)}
-        />
-        <input
-          type="password"
           placeholder="New Password"
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}

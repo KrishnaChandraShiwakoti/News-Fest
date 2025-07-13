@@ -8,12 +8,25 @@ import { useEffect } from "react";
 const EditNews = () => {
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [articles, setArticles] = useState({});
   const navigate = useNavigate();
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user) {
       navigate("/login");
     }
+    const fetchData = async () => {
+      try {
+        const response = await news.get(`/api/news/${id}`, {
+          headers: {
+            Authorization: `Bearer ${BEARER_TOKEN}`,
+          },
+        });
+        setArticles(response.data.data);
+      } catch (error) {
+        console.error("Error fetching articles:", error);
+      }
+    };
   }, []);
   const {
     register,
@@ -47,7 +60,7 @@ const EditNews = () => {
     }
 
     try {
-      const res = await news.post("", formData, {
+      const res = await news.put("/edit", formData, {
         headers: { Authorization: `Bearer ${BEARER_TOKEN}` },
         // "Content-Type": "multipart/form-data",
       });

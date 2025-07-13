@@ -5,6 +5,7 @@ import {
   getNewsByCategory,
   postNews,
   deletePost,
+  editPost,
 } from "../controllers/newsController.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 
@@ -20,5 +21,6 @@ router.get("/:id", getNewsById);
 router.get("/category/:category", getNewsByCategory);
 router.post("/", verifyToken, upload.single("image"), postNews);
 router.delete("/:id", verifyToken, deletePost);
+router.put("/edit", verifyToken, editPost);
 
 export default router;

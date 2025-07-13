@@ -53,10 +53,6 @@ function App() {
     {
       path: "/login",
       element: <Login />,
-      // children: [
-      //   {
-      //     path: "/forget",
-      //   },
       // ],
     },
   ]);

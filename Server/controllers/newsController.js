@@ -156,3 +156,50 @@ export const deletePost = async (req, res) => {
   });
   res.send(200).json({ message: "News deleted successfully" });
 };
+export const editPost = async (req, res) => {
+  try {
+    const { reporterId, title, content, status, category, imageType } =
+      req.body;
+
+    // Check if file is uploaded
+    if (!req.file) {
+      return res.status(400).json({ message: "No image uploaded." });
+    }
+
+    const { filename, path } = req.file;
+
+    // Create image record
+    const image = await Images.create({
+      filename,
+      path,
+    });
+
+    // Find category
+    const categoryRecord = await categories.findOne({
+      where: { category_name: category },
+    });
+
+    if (!categoryRecord) {
+      return res.status(400).json({ message: "Invalid category." });
+    }
+
+    const { categoryId } = categoryRecord;
+
+    // Create news record
+    await News.update({
+      title,
+      content,
+      status,
+      reporterId,
+      categoryId,
+      imageId: image.id,
+    });
+
+    return res.status(200).json({ message: "News added successfully." });
+  } catch (error) {
+    console.log("Error in postNews function", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+};
