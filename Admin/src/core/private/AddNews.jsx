@@ -47,6 +47,8 @@ const AddNews = () => {
     }
 
     try {
+      console.log(formData);
+
       const res = await news.post("", formData, {
         headers: { Authorization: `Bearer ${BEARER_TOKEN}` },
         // "Content-Type": "multipart/form-data",

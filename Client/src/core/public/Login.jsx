@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import image from "../../assets/login.jpg";
 import { auth } from "../../Utils/axios";
 import { toast } from "react-toastify";
+import { onLoginSuccess } from "../../Utils/jwt";
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -32,8 +33,7 @@ const Login = () => {
             id: res.data.user_id,
           })
         );
-        localStorage.setItem("token", res.data.token);
-
+        onLoginSuccess(res.data.token);
         navigate("/");
       } else {
         toast.error(res.data.message);

@@ -20,6 +20,7 @@ export const getAllNews = async (req, res) => {
     return {
       id: news.newsId,
       title: news.title,
+      category: news.category.category_name,
       content: news.content,
       imageUrl: news.image ? `/uploads/${news.image.filename}` : null,
       reporter: news.reporter.reporter_fullname,
@@ -33,6 +34,7 @@ export const getNewsById = async (req, res) => {
     const data = await News.findByPk(id, {
       include: [
         { model: categories, as: "category" },
+        { model: Images, as: "image" },
         { model: reporters, as: "reporter" },
       ],
     });
@@ -44,15 +46,18 @@ export const getNewsById = async (req, res) => {
         { where: id }
       );
     }
-    await data.increment({
-      views: 1,
-    });
-    if (data.length === 0) {
-      return res
-        .status(404)
-        .json({ success: false, message: "News not found" });
-    }
-    res.status(200).json({ success: true, data: data });
+    await data.increment({ views: 1 });
+
+    const result = {
+      id: data.newsId,
+      title: data.title,
+      category: data.category ? data.category.category_name : null,
+      content: data.content,
+      imageUrl: data.image ? `/uploads/${data.image.filename}` : null,
+      reporter: data.reporter ? data.reporter.reporter_fullname : null,
+    };
+
+    res.status(200).json({ data: result });
   } catch (error) {
     console.log("Error in getProduct function", error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
@@ -150,9 +155,11 @@ export const postNews = async (req, res) => {
   }
 };
 export const deletePost = async (req, res) => {
-  const { newsId } = req.body;
+  console.log(req.params);
+
+  const { id } = req.params;
   await News.destroy({
-    where: { newsId },
+    where: { newsId: id },
   });
   res.send(200).json({ message: "News deleted successfully" });
 };
@@ -160,6 +167,7 @@ export const editPost = async (req, res) => {
   try {
     const { reporterId, title, content, status, category, imageType } =
       req.body;
+    const { id } = req.params;
 
     // Check if file is uploaded
     if (!req.file) {
@@ -186,14 +194,17 @@ export const editPost = async (req, res) => {
     const { categoryId } = categoryRecord;
 
     // Create news record
-    await News.update({
-      title,
-      content,
-      status,
-      reporterId,
-      categoryId,
-      imageId: image.id,
-    });
+    await News.update(
+      {
+        title,
+        content,
+        status,
+        reporterId,
+        categoryId,
+        imageId: image.id,
+      },
+      { where: { newsId: id } }
+    );
 
     return res.status(200).json({ message: "News added successfully." });
   } catch (error) {

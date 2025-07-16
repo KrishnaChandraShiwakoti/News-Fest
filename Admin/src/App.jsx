@@ -6,13 +6,18 @@ import ProfileForm from "./Components/Profile/ProfileForm";
 import AccountSettings from "./Components/Profile/AccountSettings";
 import EditNews from "./core/private/EditNews";
 import Analytics from "./core/private/Analytics";
+import { useEffect } from "react";
+import { checkTokenExpiry } from "./Utils/jwt";
 
 function App() {
+  useEffect(() => {
+    checkTokenExpiry();
+  }, []);
   const router = createBrowserRouter([
     {
       path: "/",
       element: <HomeLayout />,
-      errorElement: <Error />,
+      // errorElement: <Error />,
       children: [
         {
           index: true,

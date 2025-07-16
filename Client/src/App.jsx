@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import {
   CategoriesPage,
@@ -15,8 +15,12 @@ import VerifyOtp from "./Components/VerifyOtp";
 import ResetPassword from "./Components/ResetPassword";
 import { PasswordResetProvider } from "./Components/PasswordResetContext";
 import UpdateProfile from "./core/private/UpdateProfile";
+import { checkTokenExpiry } from "./Utils/jwt";
 
 function App() {
+  useEffect(() => {
+    checkTokenExpiry();
+  }, []);
   const router = createBrowserRouter([
     {
       path: "/",

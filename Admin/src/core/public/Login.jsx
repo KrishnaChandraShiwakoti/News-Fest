@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { onLoginSuccess } from "../../Utils/jwt.js";
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -42,7 +43,7 @@ const Login = () => {
             id: res.data.data.reporter.reporterId,
           })
         );
-        localStorage.setItem("token", res.data.data.token);
+        onLoginSuccess(res.data.data.token);
         navigate("/");
       } else {
         toast.error(res.data.message);

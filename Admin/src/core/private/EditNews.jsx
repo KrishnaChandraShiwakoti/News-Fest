@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import "../../Styles/AddNews.css";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
@@ -9,7 +14,16 @@ const EditNews = () => {
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [articles, setArticles] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({});
+
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user) {
@@ -17,22 +31,32 @@ const EditNews = () => {
     }
     const fetchData = async () => {
       try {
-        const response = await news.get(`/api/news/${id}`, {
+        const response = await news.get(`/${id}`, {
           headers: {
             Authorization: `Bearer ${BEARER_TOKEN}`,
           },
         });
-        setArticles(response.data.data);
+        const article = response.data.data;
+        setArticles(article);
+
+        const imageUrl = `http://localhost:3000${article.imageUrl}`;
+        setImagePreview(imageUrl);
+
+        // Fetch the image as a blob and convert it to a File object
+        const imgResponse = await fetch(imageUrl);
+        const blob = await imgResponse.blob();
+
+        // Create a file name from the URL or use a default
+        const fileName = imageUrl.split("/").pop() || "image.jpg";
+        const file = new File([blob], fileName, { type: blob.type });
+
+        setImage(file);
       } catch (error) {
         console.error("Error fetching articles:", error);
       }
     };
+    fetchData();
   }, []);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
 
   const user = JSON.parse(localStorage.getItem("user"));
   const BEARER_TOKEN = localStorage.getItem("token");
@@ -46,6 +70,7 @@ const EditNews = () => {
   };
 
   const onSubmit = async (data) => {
+    setIsLoading(true);
     const formData = new FormData();
 
     formData.append("title", data.title);
@@ -54,23 +79,25 @@ const EditNews = () => {
     formData.append("category", data.category); // assuming it's the ID
     formData.append("reporterId", user.id); // use whatever ID field matches
     formData.append("image", image);
-
     for (let pair of formData.entries()) {
       console.log(pair[0] + ": " + pair[1]);
     }
 
     try {
-      const res = await news.put("/edit", formData, {
+      console.log(formData);
+      const res = await news.put(`/edit/${id}`, formData, {
         headers: { Authorization: `Bearer ${BEARER_TOKEN}` },
         // "Content-Type": "multipart/form-data",
       });
-      if (res.status == 201) {
+      if (res.status == 200) {
         toast.success(res.data.message);
         navigate("/");
       }
+      setIsLoading(false);
     } catch (err) {
       console.log(err);
       toast.error(err.response.data.message);
+      setIsLoading(false);
     }
   };
   return (
@@ -81,7 +108,7 @@ const EditNews = () => {
           <Link to={"/news"} className="cancel">
             Cancel
           </Link>
-          <button type="submit" className="publish">
+          <button type="submit" className="publish" disabled={isLoading}>
             Publish
           </button>
         </div>
@@ -92,13 +119,15 @@ const EditNews = () => {
             type="text"
             {...register("title", { required: "Email is required" })}
             placeholder="News Title"
+            defaultValue={articles.title}
           />
           {errors.email && <p>{errors.email.message}</p>}
           <textarea
             {...register("content", { required: "content is required" })}
             placeholder="Write your news content here"
             rows="10"
-            cols="10"></textarea>
+            cols="10"
+            defaultValue={articles.content}></textarea>
         </div>
         <div className="details-section">
           <h3>News Details</h3>
@@ -106,18 +135,19 @@ const EditNews = () => {
           <label htmlFor="status" status>
             Status
           </label>
-          <select
-            defaultValue={"draft"}
-            {...register("status", { required: "Status is required" })}>
+          <select {...register("status", { required: "Status is required" })}>
             <option value="draft">draft</option>
             <option value="published">published</option>
           </select>
           <label htmlFor="category">Category</label>
           <select
-            defaultValue={"world"}
             {...register("category", { required: "category is required" })}>
             <option value="world">world</option>
             <option value="news">news</option>
+            <option value="world">Entertainment</option>
+            <option value="news">Sports</option>
+            <option value="world">Education</option>
+            <option value="world">Finance</option>
           </select>
         </div>
       </div>
@@ -125,7 +155,10 @@ const EditNews = () => {
         <h3>Featured Image</h3>
         <div className="image-preview">
           {imagePreview ? (
-            <img src={imagePreview} alt="Selected" />
+            <img
+              src={`http://localhost:3000${articles.imageUrl}`}
+              alt="Selected"
+            />
           ) : (
             <div className="placeholder">
               <span role="img" aria-label="image icon">

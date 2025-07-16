@@ -21,6 +21,6 @@ router.get("/:id", getNewsById);
 router.get("/category/:category", getNewsByCategory);
 router.post("/", verifyToken, upload.single("image"), postNews);
 router.delete("/:id", verifyToken, deletePost);
-router.put("/edit", verifyToken, editPost);
+router.put("/edit/:id", verifyToken, upload.single("image"), editPost);
 
 export default router;

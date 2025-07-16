@@ -1,8 +1,9 @@
 import React, { useMemo, useState, useEffect } from "react";
 import "../../Styles/News.css";
 import { Link, useNavigate } from "react-router-dom";
-import { auth } from "../../Utils/axios";
+import { auth, news } from "../../Utils/axios";
 import DataTable from "react-data-table-component";
+import { toast } from "react-toastify";
 
 const News = () => {
   const navigate = useNavigate();
@@ -31,13 +32,27 @@ const News = () => {
     fetchArticles();
   }, []);
 
+  const BEARER_TOKEN = localStorage.getItem("token");
+
   const data = useMemo(() => articles, [articles]);
+
+  const onDelete = async (id) => {
+    console.log(id);
+    try {
+      await news.delete(`/${id}`, {
+        headers: {
+          Authorization: `Bearer ${BEARER_TOKEN}`,
+        },
+      });
+      toast.success("News Deleted Successfully");
+    } catch (error) {
+      toast.success(error);
+    }
+  };
 
   const columns = [
     { name: "Title", selector: (row) => row.title },
     { name: "Category", selector: (row) => row.category.category_name },
-    // { name: "Role", selector: (row) => row.role },
-    // { name: "Status", selector: (row) => row.status },
     {
       name: "Actions",
       cell: (row) => (
@@ -48,7 +63,6 @@ const News = () => {
       ),
     },
   ];
-  const onDelete = () => {};
 
   return <DataTable columns={columns} data={data} pagination></DataTable>;
 };
