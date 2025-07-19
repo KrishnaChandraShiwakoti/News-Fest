@@ -29,7 +29,7 @@ const Landing = () => {
     };
     fetchNews();
   }, []);
-  console.log(items);
+  console.log(topStories);
 
   const handleShare = (news) => {
     if (navigator.share) {
@@ -79,11 +79,11 @@ const Landing = () => {
               />
               <div className="landing-top-story-content">
                 <span className="landing-category-badge">
-                  {item.category?.category_name || "General"}
+                  {item?.category || "General"}
                 </span>
                 <h3 className="landing-top-story-title">{item.title}</h3>
                 <div className="landing-top-story-meta">
-                  By {item.reporter?.reporter_fullname || "Unknown"}
+                  By {item?.reporter || "Unknown"}
                 </div>
                 <div className="landing-top-story-snippet">
                   {item.content?.slice(0, 90)}
@@ -116,7 +116,7 @@ const Landing = () => {
               <div className="landing-latest-content">
                 <h4 className="landing-latest-title">{item.title}</h4>
                 <div className="landing-latest-meta">
-                  By {item.reporter?.reporter_fullname || "Unknown"}
+                  By {item?.reporter || "Unknown"}
                 </div>
               </div>
             </div>
@@ -145,7 +145,7 @@ const Landing = () => {
               <div className="landing-editors-pick-content">
                 <h4 className="landing-editors-pick-title">{item.title}</h4>
                 <div className="landing-editors-pick-meta">
-                  By {item.reporter?.reporter_fullname || "Unknown"}
+                  By {item?.reporter || "Unknown"}
                 </div>
               </div>
             </div>

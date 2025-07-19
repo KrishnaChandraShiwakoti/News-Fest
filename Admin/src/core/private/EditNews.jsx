@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-  Link,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import "../../Styles/AddNews.css";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
@@ -17,6 +12,8 @@ const EditNews = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
+  const user = JSON.parse(localStorage.getItem("user"));
+  const BEARER_TOKEN = localStorage.getItem("token");
 
   const {
     register,
@@ -25,7 +22,6 @@ const EditNews = () => {
   } = useForm({});
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
     if (!user) {
       navigate("/login");
     }
@@ -57,9 +53,6 @@ const EditNews = () => {
     };
     fetchData();
   }, []);
-
-  const user = JSON.parse(localStorage.getItem("user"));
-  const BEARER_TOKEN = localStorage.getItem("token");
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];

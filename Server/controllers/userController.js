@@ -1,4 +1,5 @@
 import User from "../model/user.js";
+import bcrypt from "bcrypt";
 
 export const getUserInfo = async (req, res) => {
   const { email } = req.params;
@@ -22,15 +23,21 @@ export const updateUser = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
     // Only update fields provided in req.body
-    Object.keys(updates).forEach((key) => {
+    for (const key of Object.keys(updates)) {
       if (
         updates[key] !== undefined &&
         updates[key] !== null &&
         updates[key] !== ""
       ) {
-        user[key] = updates[key];
+        if (key === "password") {
+          // Hash password before saving
+          const salt = await bcrypt.genSalt(10);
+          user.password = await bcrypt.hash(updates.password, salt);
+        } else {
+          user[key] = updates[key];
+        }
       }
-    });
+    }
     await user.save();
     res.status(200).json({ message: "Profile updated successfully" });
   } catch (err) {

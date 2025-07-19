@@ -9,3 +9,7 @@ export const news = axios.create({
 export const bookmark = axios.create({
   baseURL: "http://localhost:3000/bookmark",
 });
+
+export const user = axios.create({
+  baseURL: "http://localhost:3000/api/user",
+});

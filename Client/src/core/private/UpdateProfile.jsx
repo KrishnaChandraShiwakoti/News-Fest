@@ -1,25 +1,53 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import "../../Styles/UpdateProfile.css";
+import { user } from "../../Utils/axios";
+import { toast } from "react-toastify";
 
 const UpdateProfile = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
-    reset,
   } = useForm();
-  const [success, setSuccess] = React.useState("");
-  const [error, setError] = React.useState("");
+
+  const [userData, setUserData] = useState(null);
+  const { email } = JSON.parse(localStorage.getItem("user"));
+  const BEARER_TOKEN = localStorage.getItem("token");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await user.get(`/${email}`, {
+        headers: {
+          Authorization: `Bearer ${BEARER_TOKEN}`,
+        },
+      });
+      if (res.status == 200) {
+        setUserData(res.data);
+        // Set form values so required validation works correctly
+        setValue("fullname", res.data.fullname || "");
+        setValue("username", res.data.username || "");
+        setValue("email", res.data.email || "");
+        setValue("contact", res.data.contact || "");
+      }
+    };
+    fetchData();
+  }, [setValue]);
 
   const onSubmit = async (data) => {
-    setSuccess("");
-    setError("");
-    // TODO: Replace with actual API call
-    setTimeout(() => {
-      setSuccess("Profile updated successfully!");
-      reset();
-    }, 1200);
+    console.log(data);
+    try {
+      await user.put(`/${email}`, data, {
+        headers: {
+          Authorization: `Bearer ${BEARER_TOKEN}`,
+        },
+      });
+      toast.success("Profile updated");
+    } catch (error) {
+      console.log(error);
+      toast.error(`Error accrued:${error} `);
+    }
   };
 
   return (
@@ -71,8 +99,6 @@ const UpdateProfile = () => {
         <button type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Updating..." : "Update Profile"}
         </button>
-        {success && <div className="success-msg">{success}</div>}
-        {error && <div className="error-msg">{error}</div>}
       </form>
     </div>
   );
