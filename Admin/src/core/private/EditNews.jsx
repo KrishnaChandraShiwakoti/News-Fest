@@ -18,6 +18,7 @@ const EditNews = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({});
 
@@ -34,6 +35,10 @@ const EditNews = () => {
         });
         const article = response.data.data;
         setArticles(article);
+        setValue("title", article.title || "");
+        setValue("content", article.content || "");
+        setValue("status", article.status || "draft");
+        setValue("category", article.category || "news");
 
         const imageUrl = `http://localhost:3000${article.imageUrl}`;
         setImagePreview(imageUrl);
@@ -61,7 +66,6 @@ const EditNews = () => {
       setImage(file);
     }
   };
-
   const onSubmit = async (data) => {
     setIsLoading(true);
     const formData = new FormData();
@@ -112,22 +116,18 @@ const EditNews = () => {
             type="text"
             {...register("title", { required: "Email is required" })}
             placeholder="News Title"
-            defaultValue={articles.title}
           />
           {errors.email && <p>{errors.email.message}</p>}
           <textarea
             {...register("content", { required: "content is required" })}
             placeholder="Write your news content here"
             rows="10"
-            cols="10"
-            defaultValue={articles.content}></textarea>
+            cols="10"></textarea>
         </div>
         <div className="details-section">
           <h3>News Details</h3>
           <hr />
-          <label htmlFor="status" status>
-            Status
-          </label>
+          <label htmlFor="status">Status</label>
           <select {...register("status", { required: "Status is required" })}>
             <option value="draft">draft</option>
             <option value="published">published</option>
@@ -137,10 +137,10 @@ const EditNews = () => {
             {...register("category", { required: "category is required" })}>
             <option value="world">world</option>
             <option value="news">news</option>
-            <option value="world">Entertainment</option>
-            <option value="news">Sports</option>
-            <option value="world">Education</option>
-            <option value="world">Finance</option>
+            <option value="entertainment">Entertainment</option>
+            <option value="sports">Sports</option>
+            <option value="education">Education</option>
+            <option value="finance">Finance</option>
           </select>
         </div>
       </div>

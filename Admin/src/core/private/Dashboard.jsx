@@ -54,7 +54,6 @@ const Dashboard = () => {
     };
     fetchArticles();
   }, []);
-  console.log(articles);
 
   return (
     <div>

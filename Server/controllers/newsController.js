@@ -53,6 +53,7 @@ export const getNewsById = async (req, res) => {
       title: data.title,
       category: data.category ? data.category.category_name : null,
       content: data.content,
+      status: data.status,
       imageUrl: data.image ? `/uploads/${data.image.filename}` : null,
       reporter: data.reporter ? data.reporter.reporter_fullname : null,
     };
